@@ -1,0 +1,138 @@
+```gitignore
+# ==========================================
+# Gradle
+# ==========================================
+.gradle/
+**/.gradle/
+build/
+**/build/
+!src/**/build/
+gradle-app.setting
+
+# ==========================================
+# Kotlin
+# ==========================================
+.kotlin/
+*.hprof
+
+# ==========================================
+# Android Studio / IntelliJ IDEA
+# ==========================================
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# ==========================================
+# Local configuration and secrets
+# ==========================================
+local.properties
+secrets.properties
+secrets.*
+.env
+.env.*
+!.env.example
+
+# API keys and credentials
+apikey.properties
+api-key.properties
+api_keys.properties
+credentials.properties
+*.credentials
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ==========================================
+# Signing keys and certificates
+# ==========================================
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# ==========================================
+# Android build artifacts
+# ==========================================
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# ==========================================
+# Kotlin Multiplatform / Native
+# ==========================================
+.kotlin/
+konan/
+.kotlin-build/
+*.klib
+*.framework/
+*.xcframework/
+
+# ==========================================
+# Xcode / iOS
+# ==========================================
+xcuserdata/
+DerivedData/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+*.xcscmblueprint
+
+# Xcode project generated files
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# ==========================================
+# Web / Node.js
+# ==========================================
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+dist/
+.next/
+.nuxt/
+.svelte-kit/
+coverage/
+
+# ==========================================
+# Logs and temporary files
+# ==========================================
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ==========================================
+# Operating systems
+# ==========================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+
+# ==========================================
+# Test and coverage reports
+# ==========================================
+**/test-results/
+**/reports/
+```

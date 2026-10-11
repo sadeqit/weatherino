@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -7,6 +8,26 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.buildkonfig)
+    alias(libs.plugins.kotlinSerialization)
+}
+val localProperties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
+
+val openWeatherApiKey = localProperties.getProperty("OPENWEATHER_API_KEY")
+    ?: error("OPENWEATHER_API_KEY is missing in local.properties")
+
+buildkonfig {
+    packageName = "io.github.sadeqit.weatherino"
+
+    defaultConfigs {
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "OPENWEATHER_API_KEY",
+            openWeatherApiKey
+        )
+    }
 }
 
 kotlin {

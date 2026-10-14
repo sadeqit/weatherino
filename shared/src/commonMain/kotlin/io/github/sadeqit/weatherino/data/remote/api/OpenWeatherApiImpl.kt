@@ -11,7 +11,8 @@ import io.ktor.client.request.parameter
 
 class OpenWeatherApiImpl(
     private val httpClient: HttpClient
-) : OpenWeatherApi {
+) : OpenWeatherApi
+{
 
     companion object {
         private const val BASE_URL = "https://api.openweathermap.org"
@@ -26,6 +27,7 @@ class OpenWeatherApiImpl(
             parameter("lon", longitude)
             parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("units", "metric")
+            parameter("lang", "fa")
         }.body()
     }
 
@@ -49,6 +51,7 @@ class OpenWeatherApiImpl(
             parameter("lon", longitude)
             parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("units", "metric")
+            parameter("lang", "fa")
         }.body()
     }
 }

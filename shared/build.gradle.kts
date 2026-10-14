@@ -29,13 +29,17 @@ buildkonfig {
         )
     }
 }
-
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "io.github.sadeqit.weatherino.resources"
+}
 kotlin {
     jvm {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_21
         }
     }
+
     sqldelight {
         databases {
             create("WeatherinoDatabase") {
@@ -81,7 +85,11 @@ kotlin {
     }
 
     sourceSets {
+
         commonMain.dependencies {
+
+            implementation(libs.material.icons.extended)
+
             // Compose
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

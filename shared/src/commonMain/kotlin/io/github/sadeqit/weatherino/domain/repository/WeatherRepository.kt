@@ -20,4 +20,20 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double
     ): List<WeatherForecast>
+
+    suspend fun getCachedWeather(
+        latitude: Double,
+        longitude: Double
+    ): Weather?
+
+
+    suspend fun getCachedAirQuality(
+        latitude: Double,
+        longitude: Double
+    ): AirQuality?
+
+    suspend fun getCachedForecast(
+        latitude: Double,
+        longitude: Double
+    ): List<WeatherForecast>
 }

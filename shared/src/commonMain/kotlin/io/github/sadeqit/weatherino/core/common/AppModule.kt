@@ -1,8 +1,12 @@
 package io.github.sadeqit.weatherino.core.common
 
+import io.github.sadeqit.weatherino.core.database.databaseModule
 import io.github.sadeqit.weatherino.core.network.networkModule
 import io.github.sadeqit.weatherino.domain.usecase.CheckNetworkConnectionUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetAirQualityUseCase
+import io.github.sadeqit.weatherino.domain.usecase.GetCachedAirQualityUseCase
+import io.github.sadeqit.weatherino.domain.usecase.GetCachedForecastUseCase
+import io.github.sadeqit.weatherino.domain.usecase.GetCachedWeatherUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetCurrentWeatherUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetForecastUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetSavedCityUseCase
@@ -50,6 +54,21 @@ private val domainModule = module {
             cityPreferences = get()
         )
     }
+    factory {
+        GetCachedWeatherUseCase(
+            repository = get()
+        )
+    }
+    factory {
+        GetCachedAirQualityUseCase(
+            repository = get()
+        )
+    }
+    factory {
+        GetCachedForecastUseCase(
+            repository = get()
+        )
+    }
 
     viewModel {
         SplashViewModel(
@@ -67,6 +86,9 @@ private val domainModule = module {
     viewModel {
         WeatherViewModel(
             getCurrentWeather = get(),
+            getCachedWeather = get(),
+            getCachedAirQuality = get(),
+            getCachedForecast = get(),
             getAirQuality = get(),
             getForecast = get(),
             searchCitiesUseCase = get(),
@@ -77,5 +99,6 @@ private val domainModule = module {
 
 val appModules: List<Module> = listOf(
     networkModule,
+    databaseModule,
     domainModule
 )

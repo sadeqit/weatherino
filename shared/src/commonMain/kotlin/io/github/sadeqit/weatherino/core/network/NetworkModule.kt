@@ -23,7 +23,10 @@ val networkModule = module {
 
     single<WeatherRepository> {
         WeatherRepositoryImpl(
-            api = get()
+            api = get(),
+            cacheDataSource = get(),
+            airQualityCacheDataSource = get(),
+            forecastCacheDataSource = get()
         )
     }
 

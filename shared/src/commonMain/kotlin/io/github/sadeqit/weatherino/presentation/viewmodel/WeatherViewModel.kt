@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.sadeqit.weatherino.data.local.CityPreferences
 import io.github.sadeqit.weatherino.domain.usecase.GetAirQualityUseCase
+import io.github.sadeqit.weatherino.domain.usecase.GetCachedAirQualityUseCase
+import io.github.sadeqit.weatherino.domain.usecase.GetCachedForecastUseCase
+import io.github.sadeqit.weatherino.domain.usecase.GetCachedWeatherUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetCurrentWeatherUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetForecastUseCase
 import io.github.sadeqit.weatherino.domain.usecase.SearchCitiesUseCase
@@ -18,6 +21,9 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class WeatherViewModel(
     private val getCurrentWeather: GetCurrentWeatherUseCase,
+    private val getCachedWeather: GetCachedWeatherUseCase,
+    private val getCachedAirQuality: GetCachedAirQualityUseCase,
+    private val getCachedForecast: GetCachedForecastUseCase,
     private val getAirQuality: GetAirQualityUseCase,
     private val getForecast: GetForecastUseCase,
     private val searchCitiesUseCase: SearchCitiesUseCase,
@@ -35,7 +41,36 @@ class WeatherViewModel(
         locationName: String? = null
     ) {
         viewModelScope.launch {
-            _uiState.value = WeatherUiState(isLoading = true)
+            val cachedWeather = getCachedWeather(
+                latitude = latitude,
+                longitude = longitude
+            )
+
+            val cachedAirQuality = getCachedAirQuality(
+                latitude = latitude,
+                longitude = longitude
+            )
+
+            val cachedForecast = getCachedForecast(
+                latitude = latitude,
+                longitude = longitude
+            )
+
+            if (
+                cachedWeather != null ||
+                cachedAirQuality != null ||
+                cachedForecast.isNotEmpty()
+            ) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    weather = cachedWeather,
+                    airQuality = cachedAirQuality,
+                    forecast = cachedForecast,
+                    error = null
+                )
+            } else {
+                _uiState.value = WeatherUiState(isLoading = true)
+            }
 
             runCatching {
                 val weatherDeferred = async {
@@ -56,27 +91,37 @@ class WeatherViewModel(
                     forecastDeferred.await()
                 )
             }.onSuccess { (weather, airQuality, forecast) ->
-            locationName?.let {
-                cityPreferences.saveCity(
-                    name = it,
-                    latitude = latitude,
-                    longitude = longitude
-                )
-            }
+                locationName?.let {
+                    cityPreferences.saveCity(
+                        name = it,
+                        latitude = latitude,
+                        longitude = longitude
+                    )
+                }
 
-            val finalWeather = locationName?.let {
-                weather.copy(locationName = it)
-            } ?: weather
+                val finalWeather = locationName?.let {
+                    weather.copy(locationName = it)
+                } ?: weather
 
-            _uiState.value = WeatherUiState(
-                weather = finalWeather,
-                airQuality = airQuality,
-                forecast = forecast
-            )
-        }.onFailure { exception ->
                 _uiState.value = WeatherUiState(
-                    error = exception.message ?: "Unknown error"
+                    weather = finalWeather,
+                    airQuality = airQuality,
+                    forecast = forecast
                 )
+            }.onFailure { exception ->
+                if (
+                    cachedWeather == null &&
+                    cachedAirQuality == null &&
+                    cachedForecast.isEmpty()
+                ) {
+                    _uiState.value = WeatherUiState(
+                        error = exception.message ?: "Unknown error"
+                    )
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        error = exception.message
+                    )
+                }
             }
         }
     }

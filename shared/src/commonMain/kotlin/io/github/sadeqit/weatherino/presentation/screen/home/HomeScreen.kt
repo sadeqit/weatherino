@@ -1,6 +1,8 @@
 package io.github.sadeqit.weatherino.presentation.screen.home
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import io.github.sadeqit.weatherino.domain.model.City
 import io.github.sadeqit.weatherino.presentation.component.air.AirQualityCard
@@ -96,10 +99,19 @@ fun HomeScreen(
             }
         }
     }
+    val focusManager = LocalFocusManager.current
 
     WeatherBackground {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusManager.clearFocus()
+                    isSearchActive = false
+                }
         ) {
 
             WeatherHeader(

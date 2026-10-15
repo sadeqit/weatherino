@@ -34,6 +34,9 @@ compose.resources {
     packageOfResClass = "io.github.sadeqit.weatherino.resources"
 }
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     jvm {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_21
@@ -88,6 +91,7 @@ kotlin {
 
         commonMain.dependencies {
 
+            implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.material.icons.extended)
 
             // Compose
@@ -145,6 +149,7 @@ kotlin {
         }
 
         androidMain.dependencies {
+            implementation(libs.play.services.location)
             implementation(libs.compose.uiTooling)
             implementation(libs.sqldelight.android.driver)
         }

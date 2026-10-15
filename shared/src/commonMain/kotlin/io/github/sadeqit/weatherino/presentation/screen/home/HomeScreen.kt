@@ -1,9 +1,11 @@
 package io.github.sadeqit.weatherino.presentation.screen.home
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -23,6 +26,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import io.github.sadeqit.weatherino.domain.model.City
 import io.github.sadeqit.weatherino.presentation.component.air.AirQualityCard
 import io.github.sadeqit.weatherino.presentation.component.background.WeatherBackground
 import io.github.sadeqit.weatherino.presentation.component.home.WeatherHeader
@@ -31,13 +35,22 @@ import io.github.sadeqit.weatherino.presentation.component.weather.DailyForecast
 import io.github.sadeqit.weatherino.presentation.component.weather.HourlyForecast
 import io.github.sadeqit.weatherino.presentation.component.weather.WeatherDetailsRow
 import io.github.sadeqit.weatherino.presentation.component.weather.WeatherExtraDetails
+import io.github.sadeqit.weatherino.presentation.screen.city.CityItem
 import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherUiState
+import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     uiState: WeatherUiState,
-    onAirQualityClick: () -> Unit
-) {
+    onAirQualityClick: () -> Unit,
+    onSearchQueryChange: (String) -> Unit,
+    onCitySelected: (City) -> Unit
+){
+    var isSearchActive by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     val scrollState = rememberSaveable(
         saver = ScrollState.Saver
     ) {
@@ -88,18 +101,49 @@ fun HomeScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+
             WeatherHeader(
                 modifier = Modifier
-                    .statusBarsPadding(),
-                locationName = uiState.weather?.locationName ?: "تهران",
+                    .statusBarsPadding()
+                    .padding(top = 8.dp),
+                locationName = uiState.weather?.locationName ?: "",
+                isSearchActive = isSearchActive,
+                searchQuery = uiState.searchQuery,
                 onMenuClick = {
                     // Drawer
                 },
                 onSearchClick = {
-                    // Search
+                    isSearchActive = true
+                },
+                onSearchQueryChange = onSearchQueryChange,
+                onSearchClose = {
+                    isSearchActive = false
                 }
             )
+
+            if (isSearchActive && uiState.searchQuery.isNotBlank()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    uiState.searchCities.forEach { city ->
+                        CityItem(
+                            city = city,
+                            onClick = {
+                                onCitySelected(city)
+                                isSearchActive = false
+                            }
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
+
 
             uiState.weather?.let { weather ->
                 CollapsingWeatherCard(

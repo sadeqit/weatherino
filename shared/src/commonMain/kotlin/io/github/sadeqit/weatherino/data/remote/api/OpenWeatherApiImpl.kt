@@ -4,6 +4,7 @@ import io.github.sadeqit.weatherino.BuildKonfig
 import io.github.sadeqit.weatherino.data.remote.model.AirPollutionResponse
 import io.github.sadeqit.weatherino.data.remote.model.CurrentWeatherResponse
 import io.github.sadeqit.weatherino.data.remote.model.ForecastResponse
+import io.github.sadeqit.weatherino.data.remote.model.GeocodingResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -53,5 +54,17 @@ class OpenWeatherApiImpl(
             parameter("units", "metric")
             parameter("lang", "fa")
         }.body()
+    }
+    override suspend fun searchCities(
+        query: String,
+        limit: Int
+    ): List<GeocodingResponse> {
+        return httpClient
+            .get("$BASE_URL/geo/1.0/direct") {
+                parameter("q", "$query,IR")
+                parameter("limit", limit)
+                parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
+            }
+            .body()
     }
 }

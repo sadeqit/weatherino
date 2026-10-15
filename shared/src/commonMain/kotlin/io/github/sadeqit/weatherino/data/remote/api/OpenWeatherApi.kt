@@ -3,6 +3,7 @@ package io.github.sadeqit.weatherino.data.remote.api
 import io.github.sadeqit.weatherino.data.remote.model.AirPollutionResponse
 import io.github.sadeqit.weatherino.data.remote.model.CurrentWeatherResponse
 import io.github.sadeqit.weatherino.data.remote.model.ForecastResponse
+import io.github.sadeqit.weatherino.data.remote.model.GeocodingResponse
 
 interface OpenWeatherApi {
 
@@ -20,4 +21,9 @@ interface OpenWeatherApi {
         latitude: Double,
         longitude: Double
     ): ForecastResponse
+
+    suspend fun searchCities(
+        query: String,
+        limit: Int = 5
+    ): List<GeocodingResponse>
 }

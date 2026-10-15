@@ -36,4 +36,5 @@ class WeatherRepositoryImpl(
             .getForecast(latitude, longitude)
             .toDomain()
     }
+
 }

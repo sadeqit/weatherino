@@ -10,7 +10,6 @@ kotlin {
 }
 dependencies {
     implementation(project(":shared"))
-
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.compose.uiToolingPreview)

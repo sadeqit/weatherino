@@ -36,8 +36,12 @@ kermit = "2.0.5"
 junit = "4.13.2"
 buildkonfig = "0.17.1"
 
+playServicesLocation = "21.4.0"
 
 [libraries]
+
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatform-settings" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 # Kotlin
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

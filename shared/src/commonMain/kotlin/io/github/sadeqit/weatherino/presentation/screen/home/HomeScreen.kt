@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import io.github.sadeqit.weatherino.domain.model.City
+import io.github.sadeqit.weatherino.platform.location.rememberLocationPermissionRequester
 import io.github.sadeqit.weatherino.presentation.component.air.AirQualityCard
 import io.github.sadeqit.weatherino.presentation.component.background.WeatherBackground
 import io.github.sadeqit.weatherino.presentation.component.home.OfflineCacheBanner
@@ -41,17 +40,15 @@ import io.github.sadeqit.weatherino.presentation.component.weather.WeatherDetail
 import io.github.sadeqit.weatherino.presentation.component.weather.WeatherExtraDetails
 import io.github.sadeqit.weatherino.presentation.screen.city.CityItem
 import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherUiState
-import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherViewModel
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-
 fun HomeScreen(
     uiState: WeatherUiState,
     onAirQualityClick: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCitySelected: (City) -> Unit,
-    onRetry: () -> Unit
+    onRetry: () -> Unit,
+    onLocationClick: () -> Unit
 ) {
     var isSearchActive by rememberSaveable {
         mutableStateOf(false)
@@ -104,6 +101,14 @@ fun HomeScreen(
     }
     val focusManager = LocalFocusManager.current
 
+    val requestLocationPermission = rememberLocationPermissionRequester(
+        onResult = { granted ->
+            if (granted) {
+                onLocationClick()
+            }
+        }
+    )
+
     WeatherBackground {
         Column(
             modifier = Modifier
@@ -133,7 +138,8 @@ fun HomeScreen(
                 onSearchQueryChange = onSearchQueryChange,
                 onSearchClose = {
                     isSearchActive = false
-                }
+                },
+                onLocationClick = requestLocationPermission
             )
 
             if (isSearchActive && uiState.searchQuery.isNotBlank()) {

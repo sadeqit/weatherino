@@ -115,7 +115,19 @@ fun AppNavigation(
                         locationName = city.name
                     )
                 },
-                onRetry = weatherViewModel::retryWeather
+                onRetry = weatherViewModel::retryWeather,
+                onLocationClick = {
+                    scope.launch {
+                        val location = locationProvider.getCurrentLocation()
+
+                        if (location != null) {
+                            weatherViewModel.loadWeather(
+                                latitude = location.latitude,
+                                longitude = location.longitude
+                            )
+                        }
+                    }
+                }
             )
         }
 

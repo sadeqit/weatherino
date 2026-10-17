@@ -53,7 +53,7 @@ fun AirQualityScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "کیفیت هوا",
+                        text = "جزئیات کیفیت هوا",
                         style = MaterialTheme.typography.headlineMedium
                     )
 

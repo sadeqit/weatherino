@@ -6,7 +6,6 @@ import io.github.sadeqit.weatherino.domain.model.AirQuality
 fun AirPollutionResponse.toDomain(): AirQuality {
     val data = list.firstOrNull()
         ?: error("Air pollution response contains no data")
-
     return AirQuality(
         latitude = coord.lat,
         longitude = coord.lon,

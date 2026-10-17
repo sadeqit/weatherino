@@ -1,6 +1,7 @@
 package io.github.sadeqit.weatherino.presentation.screen.city
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +42,9 @@ import io.github.sadeqit.weatherino.platform.location.rememberLocationPermission
 import io.github.sadeqit.weatherino.presentation.component.background.WeatherBackground
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.viewmodel.CitySelectionViewModel
+import io.github.sadeqit.weatherino.resources.Res
+import io.github.sadeqit.weatherino.resources.icon
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -62,16 +68,36 @@ fun CitySelectionScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
+                .padding(
+                    top = 50.dp,
+                    start = 24.dp,
+                    end = 24.dp,
+                    bottom = 24.dp
+                )
                 .clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
+                    interactionSource = remember {
+                        MutableInteractionSource()
+                    }
                 ) {
                     focusManager.clearFocus()
                 },
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
+
+            Image(
+                painter = painterResource(Res.drawable.icon),
+                contentDescription = "Weatherino",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(120.dp)
+            )
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.End

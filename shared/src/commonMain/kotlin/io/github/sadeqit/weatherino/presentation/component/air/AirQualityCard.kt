@@ -46,6 +46,12 @@ fun AirQualityCard(
             LocalLayoutDirection provides LayoutDirection.Rtl
         ) {
             Column {
+                val aqi = calibrateAqi(
+                    calculateAqi(
+                        pm2_5 = airQuality.pm2_5,
+                        pm10 = airQuality.pm10
+                    )
+                )
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -98,10 +104,7 @@ fun AirQualityCard(
                         )
                         Spacer(modifier= Modifier.width(10.dp))
                         Text(
-                            text = calculateAqi(
-                                pm2_5 = airQuality.pm2_5,
-                                pm10 = airQuality.pm10
-                            ).toString(),
+                            text = aqi.toString(),
                             style = MaterialTheme.typography.bodyMedium
                         )
 
@@ -113,7 +116,7 @@ fun AirQualityCard(
                         color = GlassBorder
                     )
                     Text(
-                        text = airQualityDescription(airQuality.aqi),
+                        text = airQualityDescription(aqi),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -121,7 +124,11 @@ fun AirQualityCard(
         }
     }
 }
-
+private fun calibrateAqi(rawAqi: Int): Int {
+    return (rawAqi * 2.00)
+        .roundToInt()
+        .coerceIn(0, 500)
+}
 private fun airQualityDescription(aqi: Int): String {
     return when {
         aqi <= 50 -> "کیفیت هوا خوب است"

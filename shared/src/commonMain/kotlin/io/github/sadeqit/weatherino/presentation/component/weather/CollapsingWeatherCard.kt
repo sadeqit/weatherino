@@ -79,7 +79,7 @@ fun CollapsingWeatherCard(
 
                     Text(
                         text = "${weather.temperature.toInt()}°",
-                        style = MaterialTheme.typography.displayLarge
+                        style = MaterialTheme.typography.displayMedium
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WifiOff
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -191,7 +192,7 @@ fun SplashScreen(
                                 modifier = Modifier.height(16.dp)
                             )
 
-                            TextButton(
+                            Button(
                                 onClick = viewModel::checkConnection
                             ) {
                                 Text(

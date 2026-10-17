@@ -24,6 +24,56 @@ class SplashViewModel(
                 hasConnectionError = false
             )
 
+            val savedCity = getSavedCity()
+
+            if (savedCity != null) {
+                _uiState.value = _uiState.value.copy(
+                    isCheckingConnection = false,
+                    isConnected = true,
+                    hasConnectionError = false,
+                    savedCity = savedCity
+                )
+                return@launch
+            }
+
+            runCatching {
+                checkNetworkConnection()
+            }.onSuccess { isConnected ->
+                _uiState.value = _uiState.value.copy(
+                    isCheckingConnection = false,
+                    isConnected = isConnected,
+                    hasConnectionError = !isConnected,
+                    savedCity = null
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value.copy(
+                    isCheckingConnection = false,
+                    isConnected = false,
+                    hasConnectionError = true,
+                    savedCity = null
+                )
+            }
+        }
+    }
+}
+
+/*
+class SplashViewModel(
+    private val checkNetworkConnection: CheckNetworkConnectionUseCase,
+    private val getSavedCity: GetSavedCityUseCase
+) : ViewModel()
+{
+
+    private val _uiState = MutableStateFlow(SplashUiState())
+    val uiState: StateFlow<SplashUiState> = _uiState.asStateFlow()
+
+    fun checkConnection() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isCheckingConnection = true,
+                hasConnectionError = false
+            )
+
             val isConnected = checkNetworkConnection()
 
             _uiState.value = _uiState.value.copy(
@@ -34,4 +84,4 @@ class SplashViewModel(
             )
         }
     }
-}
+}*/

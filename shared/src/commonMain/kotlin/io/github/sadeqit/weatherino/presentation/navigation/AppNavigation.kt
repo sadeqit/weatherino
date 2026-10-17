@@ -114,7 +114,8 @@ fun AppNavigation(
                         longitude = city.longitude,
                         locationName = city.name
                     )
-                }
+                },
+                onRetry = weatherViewModel::retryWeather
             )
         }
 

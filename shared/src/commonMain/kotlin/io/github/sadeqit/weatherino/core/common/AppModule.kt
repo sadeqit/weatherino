@@ -92,7 +92,8 @@ private val domainModule = module {
             getAirQuality = get(),
             getForecast = get(),
             searchCitiesUseCase = get(),
-            cityPreferences = get()
+            cityPreferences = get(),
+            checkNetworkConnection = get()
         )
     }
 }

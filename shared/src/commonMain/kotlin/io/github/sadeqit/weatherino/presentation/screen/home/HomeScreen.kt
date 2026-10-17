@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import io.github.sadeqit.weatherino.domain.model.City
 import io.github.sadeqit.weatherino.presentation.component.air.AirQualityCard
 import io.github.sadeqit.weatherino.presentation.component.background.WeatherBackground
+import io.github.sadeqit.weatherino.presentation.component.home.OfflineCacheBanner
 import io.github.sadeqit.weatherino.presentation.component.home.WeatherHeader
 import io.github.sadeqit.weatherino.presentation.component.weather.CollapsingWeatherCard
 import io.github.sadeqit.weatherino.presentation.component.weather.DailyForecast
@@ -44,12 +45,14 @@ import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
+
 fun HomeScreen(
     uiState: WeatherUiState,
     onAirQualityClick: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
-    onCitySelected: (City) -> Unit
-){
+    onCitySelected: (City) -> Unit,
+    onRetry: () -> Unit
+) {
     var isSearchActive by rememberSaveable {
         mutableStateOf(false)
     }
@@ -156,6 +159,15 @@ fun HomeScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+
+            if (uiState.isOffline && uiState.weather != null) {
+                OfflineCacheBanner(
+                    isUpdating = uiState.isUpdating,
+                    onRetry = onRetry
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
             uiState.weather?.let { weather ->
                 CollapsingWeatherCard(

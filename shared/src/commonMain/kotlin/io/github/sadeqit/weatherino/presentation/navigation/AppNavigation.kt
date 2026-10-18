@@ -14,6 +14,7 @@ import io.github.sadeqit.weatherino.platform.location.LocationProvider
 import io.github.sadeqit.weatherino.presentation.component.drawer.WeatherDrawerContent
 import io.github.sadeqit.weatherino.presentation.screen.air.AirQualityScreen
 import io.github.sadeqit.weatherino.presentation.screen.city.CitySelectionScreen
+import io.github.sadeqit.weatherino.presentation.screen.contact.ContactScreen
 import io.github.sadeqit.weatherino.presentation.screen.home.HomeScreen
 import io.github.sadeqit.weatherino.presentation.screen.splash.SplashScreen
 import io.github.sadeqit.weatherino.presentation.viewmodel.SplashViewModel
@@ -171,6 +172,14 @@ fun AppNavigation(
                         }
                     )
                 }
+            }
+
+            composable<ContactRoute> {
+                ContactScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                )
             }
         }
     }

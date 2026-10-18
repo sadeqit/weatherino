@@ -48,6 +48,7 @@ fun HomeScreen(
     onSearchQueryChange: (String) -> Unit,
     onCitySelected: (City) -> Unit,
     onRetry: () -> Unit,
+    onMenuClick: () -> Unit,
     onLocationClick: () -> Unit
 ) {
     var isSearchActive by rememberSaveable {
@@ -129,9 +130,7 @@ fun HomeScreen(
                 locationName = uiState.weather?.locationName ?: "",
                 isSearchActive = isSearchActive,
                 searchQuery = uiState.searchQuery,
-                onMenuClick = {
-                    // Drawer
-                },
+                onMenuClick = onMenuClick,
                 onSearchClick = {
                     isSearchActive = true
                 },

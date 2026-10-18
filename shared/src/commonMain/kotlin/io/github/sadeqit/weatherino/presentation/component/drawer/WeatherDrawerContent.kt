@@ -1,218 +1,214 @@
 package io.github.sadeqit.weatherino.presentation.component.drawer
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.unit.sp
+import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
+import io.github.sadeqit.weatherino.presentation.navigation.DrawerItem
+import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
+import io.github.sadeqit.weatherino.presentation.theme.GlassShape
+import io.github.sadeqit.weatherino.presentation.theme.GlassWhite
 import io.github.sadeqit.weatherino.presentation.theme.WeatherBlue
+import io.github.sadeqit.weatherino.presentation.theme.WeatherBlueDark
 import io.github.sadeqit.weatherino.resources.Res
 import io.github.sadeqit.weatherino.resources.icon
+import org.jetbrains.compose.resources.painterResource
+
+private val drawerGroups = listOf(
+    listOf(
+        DrawerItem.Settings,
+        DrawerItem.RateApp,
+        DrawerItem.Support,
+        DrawerItem.Contact,
+        DrawerItem.About,
+    ),
+    listOf(
+        DrawerItem.Exit,
+    ),
+)
 
 @Composable
 fun WeatherDrawerContent(
-    currentRoute: String?,
-    onSettingsClick: () -> Unit,
-    onRateClick: () -> Unit,
-    onSupportClick: () -> Unit,
-    onContactClick: () -> Unit,
-    onAboutClick: () -> Unit,
-    onExitClick: () -> Unit,
+    currentItem: DrawerItem?,
+    onItemClick: (DrawerItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val glassShape = RoundedCornerShape(24.dp)
 
     ModalDrawerSheet(
-        modifier = modifier
-            .padding(8.dp)
-            .clip(glassShape)
-            .background(
-                color = WeatherBlue.copy(alpha = 0.35f),
-                shape = glassShape,
+        modifier = modifier.width(290.dp).background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    WeatherBlue,
+                    WeatherBlueDark,
+                )
             )
-            .border(
-                width = 1.dp,
-                color = Color.White.copy(alpha = 0.20f),
-                shape = glassShape,
-            ),
+        ),
         drawerContainerColor = Color.Transparent,
-        drawerContentColor = Color.White,
-        drawerShape = glassShape,
+
+        drawerShape = RoundedCornerShape(15.dp),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState()),
         ) {
 
             // Header
+            DrawerHeader()
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Spacer(
+                        modifier = Modifier.height(16.dp)
+                    )
+
+                    drawerGroups.forEachIndexed { index, group ->
+
+                        DrawerGroup(
+                            items = group,
+                            currentItem = currentItem,
+                            onItemClick = onItemClick,
+                        )
+
+                        if (index != drawerGroups.lastIndex) {
+                            Spacer(
+                                modifier = Modifier.height(8.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(
+                        modifier = Modifier.height(16.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun DrawerHeader() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
+            .background(
+                color = GlassWhite
+            )
+            .border(
+                width = 1.dp,
+                color = GlassBorder,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Image(
                 painter = painterResource(Res.drawable.icon),
                 contentDescription = "Weatherino",
-                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(80.dp),
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            Text(
+                text = "ودِرینو — هواشناسی هوشمند",
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+    }
+}
+
+@Composable
+private fun DrawerGroup(
+    items: List<DrawerItem>,
+    currentItem: DrawerItem?,
+    onItemClick: (DrawerItem) -> Unit,
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        items.forEach { item ->
+
+            GlassCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Settings
-            NavigationDrawerItem(
-                label = {
-                    Text("تنظیمات")
+                    .clip(GlassShape)
+                    .clickable {
+                    onItemClick(item)
                 },
-                selected = currentRoute == "settings",
-                onClick = onSettingsClick,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "تنظیمات",
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                        .padding(6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        painter = painterResource(item.icon),
+                        contentDescription = item.title,
+                        modifier = Modifier.size(30.dp),
                     )
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = Color.White.copy(alpha = 0.15f),
-                    unselectedContainerColor = Color.Transparent,
-                    selectedIconColor = Color.White,
-                    unselectedIconColor = Color.White,
-                    selectedTextColor = Color.White,
-                    unselectedTextColor = Color.White,
-                ),
-            )
 
-            // Rate
-            NavigationDrawerItem(
-                label = {
-                    Text("نظر دادن به برنامه")
-                },
-                selected = false,
-                onClick = onRateClick,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "نظر دادن به برنامه",
+                    Spacer(
+                        modifier = Modifier.width(16.dp)
                     )
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    unselectedContainerColor = Color.Transparent,
-                    unselectedIconColor = Color.White,
-                    unselectedTextColor = Color.White,
-                ),
-            )
 
-            // Support
-            NavigationDrawerItem(
-                label = {
-                    Text("حمایت از من")
-                },
-                selected = false,
-                onClick = onSupportClick,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "حمایت از من",
+                    Text(
+                        text = item.title,
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 18.sp,
+                        fontWeight = if (item == currentItem) {
+                            FontWeight.Bold
+                        } else {
+                            FontWeight.Normal
+                        },
                     )
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    unselectedContainerColor = Color.Transparent,
-                    unselectedIconColor = Color.White,
-                    unselectedTextColor = Color.White,
-                ),
-            )
-
-            // Contact
-            NavigationDrawerItem(
-                label = {
-                    Text("ارتباط با ما")
-                },
-                selected = false,
-                onClick = onContactClick,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = "ارتباط با ما",
-                    )
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    unselectedContainerColor = Color.Transparent,
-                    unselectedIconColor = Color.White,
-                    unselectedTextColor = Color.White,
-                ),
-            )
-
-            // About
-            NavigationDrawerItem(
-                label = {
-                    Text("درباره Weatherino")
-                },
-                selected = currentRoute == "about",
-                onClick = onAboutClick,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = "درباره Weatherino",
-                    )
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = Color.White.copy(alpha = 0.15f),
-                    unselectedContainerColor = Color.Transparent,
-                    selectedIconColor = Color.White,
-                    unselectedIconColor = Color.White,
-                    selectedTextColor = Color.White,
-                    unselectedTextColor = Color.White,
-                ),
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            androidx.compose.material3.HorizontalDivider(
-                color = Color.White.copy(alpha = 0.15f),
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Exit
-            NavigationDrawerItem(
-                label = {
-                    Text("خروج از برنامه")
-                },
-                selected = false,
-                onClick = onExitClick,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.ExitToApp,
-                        contentDescription = "خروج از برنامه",
-                    )
-                },
-                colors = NavigationDrawerItemDefaults.colors(
-                    unselectedContainerColor = Color.Transparent,
-                    unselectedIconColor = Color.White,
-                    unselectedTextColor = Color.White,
-                ),
-            )
+                }
+            }
         }
     }
 }

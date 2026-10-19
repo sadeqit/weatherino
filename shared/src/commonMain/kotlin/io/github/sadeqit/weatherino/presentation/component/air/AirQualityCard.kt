@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ import kotlin.math.roundToInt
 fun AirQualityCard(
     airQuality: AirQuality,
     onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    @Suppress("ModifierParameter") modifier: Modifier = Modifier
 ) {
     GlassCard(
         modifier = modifier.then(
@@ -60,6 +61,7 @@ fun AirQualityCard(
                 ) {
                     Text(
                         text = "کیفیت هوا",
+                        color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -69,6 +71,7 @@ fun AirQualityCard(
                         ) {
                             Text(
                                 text = "جزئیات بیشتر",
+                                color = Color.White,
                                 style = MaterialTheme.typography.bodyMedium
                             )
 
@@ -78,7 +81,8 @@ fun AirQualityCard(
 
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                                contentDescription = "جزئیات بیشتر"
+                                contentDescription = "جزئیات بیشتر",
+                                tint = Color.White
                             )
                         }
                     }
@@ -100,11 +104,13 @@ fun AirQualityCard(
                     ) {
                         Text(
                             text = "شاخص کیفیت هوا:",
+                            color = Color.White,
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Spacer(modifier= Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = aqi.toString(),
+                            color = Color.White,
                             style = MaterialTheme.typography.bodyMedium
                         )
 
@@ -117,6 +123,7 @@ fun AirQualityCard(
                     )
                     Text(
                         text = airQualityDescription(aqi),
+                        color = Color.White,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -124,11 +131,13 @@ fun AirQualityCard(
         }
     }
 }
+
 private fun calibrateAqi(rawAqi: Int): Int {
     return (rawAqi * 2.00)
         .roundToInt()
         .coerceIn(0, 500)
 }
+
 private fun airQualityDescription(aqi: Int): String {
     return when {
         aqi <= 50 -> "کیفیت هوا خوب است"

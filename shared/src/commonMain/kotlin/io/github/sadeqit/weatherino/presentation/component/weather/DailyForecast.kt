@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ fun DailyForecast(
             Column {
                 Text(
                     text = "پیش‌بینی ۵ روز آینده",
+                    color = Color.White,
                     style = MaterialTheme.typography.titleMedium
                 )
                 HorizontalDivider(
@@ -96,6 +98,7 @@ private fun DailyForecastItem(
     ) {
         Text(
             text = date,
+            color = Color.White,
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -112,11 +115,13 @@ private fun DailyForecastItem(
         ) {
             Text(
                 text = "بیشینه ${maxTemperature.toInt()}°",
+                color = Color.White,
                 style = MaterialTheme.typography.titleMedium
             )
 
             Text(
                 text = "کمینه ${minTemperature.toInt()}°",
+                color = Color.White,
                 style = MaterialTheme.typography.titleMedium
             )
         }

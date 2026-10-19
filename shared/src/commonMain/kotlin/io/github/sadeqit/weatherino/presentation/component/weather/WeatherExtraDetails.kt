@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -44,16 +45,19 @@ fun WeatherExtraDetails(
                 ) {
                     Text(
                         text = "جزئیات هوا",
+                        color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
 
                     Text(
                         text = date.toPersianDate(),
+                        color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
 
                     Text(
                         text = weather.locationName,
+                        color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -153,11 +157,13 @@ private fun WeatherDetailItem(
     ) {
         Text(
             text = title,
+            color = Color.White,
             style = MaterialTheme.typography.bodyMedium
         )
 
         Text(
             text = value,
+            color = Color.White,
             style = MaterialTheme.typography.titleMedium
         )
     }

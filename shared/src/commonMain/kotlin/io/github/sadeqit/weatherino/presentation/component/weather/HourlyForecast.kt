@@ -17,6 +17,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +41,7 @@ fun HourlyForecast(
             Text(
                 text = "پیش‌ بینی ساعتی",
                 style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End
             )
@@ -85,6 +87,7 @@ private fun HourlyForecastItem(
     ) {
         Text(
             text = forecast.dateTimeText.toPersianDate(),
+            color = Color.White,
             style = MaterialTheme.typography.bodySmall
 
         )
@@ -93,6 +96,7 @@ private fun HourlyForecastItem(
             text = forecast.dateTimeText
                 .substringAfter(" ")
                 .take(5),
+            color = Color.White,
             style = MaterialTheme.typography.bodySmall
         )
 
@@ -114,6 +118,7 @@ private fun HourlyForecastItem(
 
         Text(
             text = "${forecast.temperature.toInt()}°",
+            color = Color.White,
             style = MaterialTheme.typography.titleMedium
         )
     }

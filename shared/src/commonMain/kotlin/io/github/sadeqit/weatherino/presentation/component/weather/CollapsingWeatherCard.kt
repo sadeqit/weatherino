@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.sadeqit.weatherino.domain.model.Weather
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
@@ -79,6 +80,7 @@ fun CollapsingWeatherCard(
 
                     Text(
                         text = "${weather.temperature.toInt()}°",
+                        color = Color.White,
                         style = MaterialTheme.typography.displayMedium
                     )
 
@@ -86,6 +88,7 @@ fun CollapsingWeatherCard(
 
                     Text(
                         text = weatherDescription,
+                        color = Color.White,
                         style = MaterialTheme.typography.titleLarge
                     )
 
@@ -93,6 +96,7 @@ fun CollapsingWeatherCard(
 
                     Text(
                         text = "دمای هوا ${weather.temperature.toInt()} درجه سانتی‌گراد",
+                        color = Color.White,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -115,17 +119,20 @@ fun CollapsingWeatherCard(
                     ) {
                         Text(
                             text = "${weather.temperature.toInt()}°",
+                            color = Color.White,
                             style = MaterialTheme.typography.headlineLarge
                         )
 
                         Text(
                             text = weatherDescription,
+                            color = Color.White,
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
 
                     Text(
                         text = "دمای هوا ${weather.temperature.toInt()} درجه سانتی‌گراد",
+                        color = Color.White,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

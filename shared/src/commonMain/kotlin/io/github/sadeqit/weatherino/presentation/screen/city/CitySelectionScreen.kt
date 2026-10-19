@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -34,8 +35,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.sadeqit.weatherino.domain.model.City
 import io.github.sadeqit.weatherino.platform.location.rememberLocationPermissionRequester
@@ -105,6 +108,9 @@ fun CitySelectionScreen(
                 Text(
                     text = "شهر خود را انتخاب کنید",
                     color = Color.White,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Right,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -115,7 +121,7 @@ fun CitySelectionScreen(
 
                 Text(
                     text = "برای مشاهده وضعیت آب‌ و هوا، شهر خود را جستجو کنید یا از موقعیت فعلی استفاده کنید",
-                    color = Color.White.copy(alpha = 0.7f),
+                    color = Color.White,
                     textAlign = TextAlign.Right,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -159,7 +165,7 @@ fun CitySelectionScreen(
                     placeholder = {
                         Text(
                             text = "جستجوی شهر",
-                            color = Color.White.copy(alpha = 0.55f),
+                            color = Color.White,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Right
                         )

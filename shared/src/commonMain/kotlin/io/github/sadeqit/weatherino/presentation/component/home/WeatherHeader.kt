@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -31,8 +32,10 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
 import io.github.sadeqit.weatherino.presentation.theme.GlassShape
 import io.github.sadeqit.weatherino.presentation.theme.GlassWhite
@@ -94,7 +97,7 @@ fun WeatherHeader(
                         text = "جستجوی شهر",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Right,
-                        color = Color.White.copy(alpha = 0.55f)
+                        color = Color.White
                     )
                 },
 
@@ -149,6 +152,10 @@ fun WeatherHeader(
             Text(
                 modifier = Modifier.align(Alignment.Center),
                 text = locationName,
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.W600,
+                color = Color.White,
                 maxLines = 1
             )
 

@@ -98,7 +98,7 @@ fun ContactScreen(
 
     WeatherBackground {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(top = 30.dp),
         ) {
             ContactTopBar(
                 onBackClick = onBackClick,

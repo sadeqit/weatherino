@@ -184,7 +184,7 @@ fun SplashScreen(
 
                             Text(
                                 text = "ابتدا اینترنت خود را وصل کنید، سپس تلاش مجدد را بزنید",
-                                color = Color.White.copy(alpha = 0.8f),
+                                color = Color.White,
                                 textAlign = TextAlign.Center
                             )
 

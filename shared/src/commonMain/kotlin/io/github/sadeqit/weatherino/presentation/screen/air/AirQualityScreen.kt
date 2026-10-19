@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,8 @@ fun AirQualityScreen(
                 ) {
                     Text(
                         text = "جزئیات کیفیت هوا",
-                        style = MaterialTheme.typography.headlineMedium
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = Color.White
                     )
 
                     Spacer(
@@ -66,7 +68,8 @@ fun AirQualityScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                            contentDescription = "بازگشت"
+                            contentDescription = "بازگشت",
+                            tint = Color.White
                         )
                     }
                 }
@@ -85,6 +88,7 @@ fun AirQualityScreen(
                     Column {
                         Text(
                             text = "آلاینده‌ ها",
+                            color = Color.White,
                             style = MaterialTheme.typography.titleLarge
                         )
 
@@ -143,6 +147,7 @@ private fun AirPollutantItem(
     ) {
         Text(
             text = title,
+            color = Color.White,
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -152,6 +157,7 @@ private fun AirPollutantItem(
 
         Text(
             text = value,
+            color = Color.White,
             style = MaterialTheme.typography.bodySmall
         )
 

@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.sadeqit.weatherino.platform.location.LocationProvider
 import io.github.sadeqit.weatherino.presentation.component.drawer.WeatherDrawerContent
+import io.github.sadeqit.weatherino.presentation.screen.about.AboutScreen
 import io.github.sadeqit.weatherino.presentation.screen.air.AirQualityScreen
 import io.github.sadeqit.weatherino.presentation.screen.city.CitySelectionScreen
 import io.github.sadeqit.weatherino.presentation.screen.contact.ContactScreen
@@ -176,6 +177,13 @@ fun AppNavigation(
 
             composable<ContactRoute> {
                 ContactScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                )
+            }
+            composable<AboutRoute> {
+                AboutScreen(
                     onBackClick = {
                         navController.popBackStack()
                     },

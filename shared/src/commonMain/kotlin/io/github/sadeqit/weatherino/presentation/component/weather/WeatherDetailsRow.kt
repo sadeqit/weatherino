@@ -11,6 +11,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
@@ -70,12 +71,14 @@ private fun WeatherDetailItem(
     ) {
         Text(
             text = value,
+            color = Color.White,
             style = MaterialTheme.typography.titleMedium
         )
 
 
         Text(
             text = title,
+            color = Color.White,
             style = MaterialTheme.typography.bodyMedium
         )
     }

@@ -96,10 +96,12 @@ private val domainModule = module {
             checkNetworkConnection = get()
         )
     }
+
 }
 
 val appModules: List<Module> = listOf(
     networkModule,
     databaseModule,
-    domainModule
+    domainModule,
+    *platformModules.toTypedArray()
 )

@@ -26,7 +26,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppNavigation(
-
+    onExit: () -> Unit
 ) {
     val navController = rememberNavController()
     val weatherViewModel: WeatherViewModel = koinViewModel()
@@ -48,7 +48,7 @@ fun AppNavigation(
                     handleDrawerItem(
                         item = item,
                         navController = navController,
-                        onExitClick = {}
+                        onExitClick = onExit
                     )
 
                     scope.launch {

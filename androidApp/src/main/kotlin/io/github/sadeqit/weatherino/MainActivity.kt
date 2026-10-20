@@ -14,7 +14,11 @@ class MainActivity : ComponentActivity() {
         initAndroidKoin(this)
 
         setContent {
-            App()
+            App(
+                onExit = {
+                    finishAffinity()
+                }
+            )
         }
     }
 }

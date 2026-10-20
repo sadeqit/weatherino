@@ -11,7 +11,8 @@ import com.russhwolf.settings.Settings
 import org.koin.dsl.module
 
 val networkModule = module {
-    single {
+
+     single {
         createHttpClient()
     }
 
@@ -45,5 +46,7 @@ val networkModule = module {
             settings = get()
         )
     }
+
+
 
 }

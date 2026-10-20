@@ -8,12 +8,16 @@ import io.github.sadeqit.weatherino.presentation.navigation.AppNavigation
 import io.github.sadeqit.weatherino.presentation.theme.WeatherinoTheme
 
 @Composable
-fun App() {
+fun App(
+    onExit: () -> Unit
+) {
     WeatherinoTheme {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            AppNavigation()
+            AppNavigation(
+                onExit = onExit
+            )
         }
     }
 }

@@ -47,7 +47,6 @@ kotlin {
         databases {
             create("WeatherinoDatabase") {
                 packageName.set("io.github.sadeqit.weatherino.database")
-
             }
         }
     }

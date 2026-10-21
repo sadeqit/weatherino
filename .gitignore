@@ -136,3 +136,6 @@ $RECYCLE.BIN/
 **/test-results/
 **/reports/
 ```
+*.db
+*.db-shm
+*.db-wal

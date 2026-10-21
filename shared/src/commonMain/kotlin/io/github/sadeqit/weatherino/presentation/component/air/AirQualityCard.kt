@@ -133,7 +133,7 @@ fun AirQualityCard(
 }
 
 private fun calibrateAqi(rawAqi: Int): Int {
-    return (rawAqi * 1.60)
+    return (rawAqi * 2.0)
         .roundToInt()
         .coerceIn(0, 500)
 }

@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -98,14 +102,16 @@ fun ContactScreen(
 
     WeatherBackground {
         Column(
-            modifier = Modifier.fillMaxSize().padding(top = 30.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars),
         ) {
             ContactTopBar(
                 onBackClick = onBackClick,
             )
 
             CompositionLocalProvider(
-                androidx.compose.ui.platform.LocalLayoutDirection provides LayoutDirection.Rtl,
+                LocalLayoutDirection provides LayoutDirection.Rtl,
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -162,10 +168,8 @@ private fun ContactTopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 12.dp,
-                vertical = 8.dp,
-            ),
+            .height(64.dp)
+            .padding(horizontal = 12.dp),
     ) {
         IconButton(
             onClick = onBackClick,

@@ -18,6 +18,7 @@ import io.github.sadeqit.weatherino.presentation.screen.city.CitySelectionScreen
 import io.github.sadeqit.weatherino.presentation.screen.contact.ContactScreen
 import io.github.sadeqit.weatherino.presentation.screen.home.HomeScreen
 import io.github.sadeqit.weatherino.presentation.screen.splash.SplashScreen
+import io.github.sadeqit.weatherino.presentation.screen.support.SupportScreen
 import io.github.sadeqit.weatherino.presentation.viewmodel.SplashViewModel
 import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherViewModel
 import kotlinx.coroutines.launch
@@ -184,6 +185,13 @@ fun AppNavigation(
             }
             composable<AboutRoute> {
                 AboutScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                )
+            }
+            composable<SupportRoute> {
+                SupportScreen(
                     onBackClick = {
                         navController.popBackStack()
                     },

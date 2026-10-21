@@ -7,17 +7,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +52,9 @@ fun AboutScreen(
 ) {
     WeatherBackground {
         Column(
-            modifier = Modifier.fillMaxSize().padding(top = 30.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars),
         ) {
             AboutTopBar(
                 onBackClick = onBackClick,
@@ -65,18 +71,16 @@ fun AboutScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     AboutHeader()
-
                     AboutDescription()
-
+                    AboutDataSource()
                     AboutFeatures()
-
                     AboutDeveloper()
+                    Spacer(modifier = Modifier.height(50.dp))
                 }
             }
         }
     }
 }
-
 @Composable
 private fun AboutTopBar(
     onBackClick: () -> Unit,
@@ -84,10 +88,8 @@ private fun AboutTopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 12.dp,
-                vertical = 8.dp,
-            ),
+            .height(64.dp)
+            .padding(horizontal = 12.dp),
     ) {
         IconButton(
             onClick = onBackClick,
@@ -169,6 +171,76 @@ private fun AboutDescription() {
                 style = MaterialTheme.typography.bodyMedium,
                 lineHeight = 24.sp,
             )
+        }
+    }
+}
+
+@Composable
+private fun AboutDataSource() {
+    GlassCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                openLink("https://openweathermap.org")
+            },
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+
+                Text(
+                    text = "منبع داده‌های هواشناسی",
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                Spacer(
+                    modifier = Modifier.width(8.dp),
+                )
+
+
+
+                Icon(
+                    imageVector = Icons.Default.Cloud,
+                    contentDescription = null,
+                    tint = Color.White,
+                )
+            }
+
+            Text(
+                text = "اطلاعات هواشناسی و کیفیت هوا در ودرینو با استفاده از داده‌ها و API سرویس OpenWeather دریافت می‌شود.",
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium,
+                lineHeight = 22.sp,
+            )
+
+            Row(
+
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "OpenWeather",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                )
+
+                Spacer(
+                    modifier = Modifier.width(4.dp),
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                    contentDescription = "باز کردن وب‌سایت OpenWeather",
+                    modifier = Modifier.size(16.dp),
+                    tint = Color.White,
+                )
+            }
         }
     }
 }

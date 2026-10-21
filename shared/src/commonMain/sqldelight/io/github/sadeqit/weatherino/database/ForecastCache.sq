@@ -26,7 +26,7 @@ CREATE TABLE ForecastCache (
     weatherDescription TEXT NOT NULL,
     weatherIcon TEXT NOT NULL,
 
-    dateTimeText TEXT NOT NULL,
+    timezone INTEGER NOT NULL,
 
     PRIMARY KEY (latitude, longitude, timestamp)
 );
@@ -59,7 +59,7 @@ INSERT OR REPLACE INTO ForecastCache (
     weatherMain,
     weatherDescription,
     weatherIcon,
-    dateTimeText
+    timezone
 )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 

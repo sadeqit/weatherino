@@ -49,18 +49,12 @@ class ForecastCacheDataSource(
                     weatherMain = forecast.weatherMain,
                     weatherDescription = forecast.weatherDescription,
                     weatherIcon = forecast.weatherIcon,
-                    dateTimeText = forecast.dateTimeText
+                    timezone = forecast.timezone.toLong(),
                 )
             }
         }
     }
 
-    suspend fun deleteForecast(
-        latitude: Double,
-        longitude: Double
-    ) {
-        queries.deleteForecast(latitude, longitude)
-    }
 }
 
 private fun ForecastCache.toDomain(): WeatherForecast {
@@ -83,6 +77,6 @@ private fun ForecastCache.toDomain(): WeatherForecast {
         weatherMain = weatherMain,
         weatherDescription = weatherDescription,
         weatherIcon = weatherIcon,
-        dateTimeText = dateTimeText
+        timezone = timezone.toInt(),
     )
 }

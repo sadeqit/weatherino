@@ -1,5 +1,10 @@
 package io.github.sadeqit.weatherino.presentation.util
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Duration.Companion.seconds
+
 private val jalaliMonths = arrayOf(
     "فروردین",
     "اردیبهشت",
@@ -12,7 +17,7 @@ private val jalaliMonths = arrayOf(
     "آذر",
     "دی",
     "بهمن",
-    "اسفند"
+    "اسفند",
 )
 
 private val weekDays = arrayOf(
@@ -22,30 +27,85 @@ private val weekDays = arrayOf(
     "سه‌شنبه",
     "چهارشنبه",
     "پنجشنبه",
-    "جمعه"
+    "جمعه",
 )
 
-fun String.toPersianDate(): String {
-    val parts = substringBefore(" ").split("-")
+fun forecastLocalDateKey(
+    timestamp: Long,
+    timezone: Int,
+): String {
+    val date = forecastLocalDate(
+        timestamp = timestamp,
+        timezone = timezone,
+    )
 
-    if (parts.size != 3) return this
+    return "${date.year}-${date.month.number}-${date.day}"
+}
 
-    val year = parts[0].toIntOrNull() ?: return this
-    val month = parts[1].toIntOrNull() ?: return this
-    val day = parts[2].toIntOrNull() ?: return this
+fun forecastToPersianDate(
+    timestamp: Long,
+    timezone: Int,
+): String {
+    val date = forecastLocalDate(
+        timestamp = timestamp,
+        timezone = timezone,
+    )
 
-    val (jalaliYear, jalaliMonth, jalaliDay) =
-        gregorianToJalali(year, month, day)
+    val year = date.year
+    val month = date.month.number
+    val day = date.day
 
-    val dayOfWeek = gregorianDayOfWeek(year, month, day)
+    val (_, jalaliMonth, jalaliDay) =
+        gregorianToJalali(
+            gy = year,
+            gm = month,
+            gd = day,
+        )
+
+    val dayOfWeek = gregorianDayOfWeek(
+        year = year,
+        month = month,
+        day = day,
+    )
 
     return "${weekDays[dayOfWeek]}، $jalaliDay ${jalaliMonths[jalaliMonth - 1]}"
 }
 
+fun forecastLocalTime(
+    timestamp: Long,
+    timezone: Int,
+): String {
+    val dateTime = forecastLocalDateTime(
+        timestamp = timestamp,
+        timezone = timezone,
+    )
+
+    val hour = dateTime.hour.toString().padStart(2, '0')
+    val minute = dateTime.minute.toString().padStart(2, '0')
+
+    return "$hour:$minute"
+}
+
+private fun forecastLocalDateTime(
+    timestamp: Long,
+    timezone: Int,
+) = kotlin.time.Instant
+    .fromEpochSeconds(timestamp)
+    .plus(timezone.seconds)
+    .toLocalDateTime(TimeZone.UTC)
+
+private fun forecastLocalDate(
+    timestamp: Long,
+    timezone: Int,
+) = forecastLocalDateTime(
+    timestamp = timestamp,
+    timezone = timezone,
+).date
+
 private fun gregorianDayOfWeek(
     year: Int,
     month: Int,
-    day: Int
+    day: Int,
 ): Int {
     val adjustedYear = if (month < 3) year - 1 else year
     val adjustedMonth = if (month < 3) month + 12 else month
@@ -53,7 +113,7 @@ private fun gregorianDayOfWeek(
     val k = adjustedYear % 100
     val j = adjustedYear / 100
 
-    val h = (
+    return (
             day +
                     (13 * (adjustedMonth + 1)) / 5 +
                     k +
@@ -61,27 +121,16 @@ private fun gregorianDayOfWeek(
                     j / 4 +
                     5 * j
             ) % 7
-
-    return when (h) {
-        0 -> 5 // پنجشنبه
-        1 -> 6 // جمعه
-        2 -> 0 // شنبه
-        3 -> 1 // یکشنبه
-        4 -> 2 // دوشنبه
-        5 -> 3 // سه‌شنبه
-        else -> 4 // چهارشنبه
-    }
 }
 
 private fun gregorianToJalali(
     gy: Int,
     gm: Int,
-    gd: Int
+    gd: Int,
 ): Triple<Int, Int, Int> {
-
     val gDaysInMonth = intArrayOf(
         31, 28, 31, 30, 31, 30,
-        31, 31, 30, 31, 30, 31
+        31, 31, 30, 31, 30, 31,
     )
 
     var gy2 = gy

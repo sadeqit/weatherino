@@ -1,4 +1,4 @@
-package io.github.sadeqit.weatherino.domain.repository
+package io.github.sadeqit.weatherino.data.repository
 
 import io.github.sadeqit.weatherino.data.local.AirQualityCacheDataSource
 import io.github.sadeqit.weatherino.data.local.ForecastCacheDataSource
@@ -8,6 +8,7 @@ import io.github.sadeqit.weatherino.data.remote.api.OpenWeatherApi
 import io.github.sadeqit.weatherino.domain.model.AirQuality
 import io.github.sadeqit.weatherino.domain.model.Weather
 import io.github.sadeqit.weatherino.domain.model.WeatherForecast
+import io.github.sadeqit.weatherino.domain.repository.WeatherRepository
 
 class WeatherRepositoryImpl(
     private val api: OpenWeatherApi,

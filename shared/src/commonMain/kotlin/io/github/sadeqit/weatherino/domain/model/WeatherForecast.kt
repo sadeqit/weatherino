@@ -19,5 +19,5 @@ data class WeatherForecast(
     val weatherMain: String,
     val weatherDescription: String,
     val weatherIcon: String,
-    val dateTimeText: String
+    val timezone: Int,
 )

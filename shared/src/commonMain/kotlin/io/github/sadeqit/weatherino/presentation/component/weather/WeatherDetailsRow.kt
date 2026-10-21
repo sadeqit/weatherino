@@ -13,6 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.github.sadeqit.weatherino.domain.model.DistanceUnit
+import io.github.sadeqit.weatherino.domain.model.WindSpeedUnit
+import io.github.sadeqit.weatherino.domain.util.WeatherUnitFormatter
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
 
@@ -21,7 +24,9 @@ fun WeatherDetailsRow(
     humidity: Int,
     windSpeed: Double,
     visibility: Int?,
-    modifier: Modifier = Modifier
+    windSpeedUnit: WindSpeedUnit,
+    distanceUnit: DistanceUnit,
+    modifier: Modifier = Modifier,
 ) {
     GlassCard(
         modifier = modifier
@@ -43,7 +48,10 @@ fun WeatherDetailsRow(
             )
             WeatherDetailItem(
                 title = "باد",
-                value = "$windSpeed m/s"
+                value = WeatherUnitFormatter.windSpeed(
+                    metersPerSecond = windSpeed,
+                    unit = windSpeedUnit,
+                ),
             )
             VerticalDivider(
                 modifier = Modifier
@@ -54,8 +62,11 @@ fun WeatherDetailsRow(
             WeatherDetailItem(
                 title = "دید",
                 value = visibility?.let {
-                    "${it / 1000.0} km"
-                } ?: "-"
+                    WeatherUnitFormatter.distance(
+                        meters = it,
+                        unit = distanceUnit,
+                    )
+                } ?: "-",
             )
         }
     }

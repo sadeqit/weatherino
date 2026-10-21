@@ -5,10 +5,16 @@ import io.github.sadeqit.weatherino.data.remote.model.ForecastResponse
 import io.github.sadeqit.weatherino.domain.model.WeatherForecast
 
 fun ForecastResponse.toDomain(): List<WeatherForecast> {
-    return list.map(ForecastItemDto::toDomain)
+    return list.map { item ->
+        item.toDomain(
+            timezone = city.timezone,
+        )
+    }
 }
 
-private fun ForecastItemDto.toDomain(): WeatherForecast {
+private fun ForecastItemDto.toDomain(
+    timezone: Int,
+): WeatherForecast {
     val condition = weather.firstOrNull()
 
     return WeatherForecast(
@@ -30,6 +36,6 @@ private fun ForecastItemDto.toDomain(): WeatherForecast {
         weatherMain = condition?.main.orEmpty(),
         weatherDescription = condition?.description.orEmpty(),
         weatherIcon = condition?.icon.orEmpty(),
-        dateTimeText = dateTimeText
+        timezone = timezone,
     )
 }

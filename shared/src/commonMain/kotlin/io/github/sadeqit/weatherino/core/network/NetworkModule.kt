@@ -6,8 +6,10 @@ import io.github.sadeqit.weatherino.data.remote.api.OpenWeatherApiImpl
 import io.github.sadeqit.weatherino.data.repository.CityRepositoryImpl
 import io.github.sadeqit.weatherino.domain.repository.CityRepository
 import io.github.sadeqit.weatherino.domain.repository.WeatherRepository
-import io.github.sadeqit.weatherino.domain.repository.WeatherRepositoryImpl
+import io.github.sadeqit.weatherino.data.repository.WeatherRepositoryImpl
 import com.russhwolf.settings.Settings
+import io.github.sadeqit.weatherino.data.repository.SettingsRepositoryImpl
+import io.github.sadeqit.weatherino.domain.repository.SettingsRepository
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -47,6 +49,21 @@ val networkModule = module {
         )
     }
 
+    single<Settings> {
+        Settings()
+    }
+
+    single {
+        CityPreferences(
+            settings = get()
+        )
+    }
+
+    single<SettingsRepository> {
+        SettingsRepositoryImpl(
+            settings = get()
+        )
+    }
 
 
 }

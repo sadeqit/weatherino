@@ -19,16 +19,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.github.sadeqit.weatherino.domain.model.PrecipitationUnit
+import io.github.sadeqit.weatherino.domain.model.PressureUnit
 import io.github.sadeqit.weatherino.domain.model.Weather
+import io.github.sadeqit.weatherino.domain.util.WeatherUnitFormatter
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
-import io.github.sadeqit.weatherino.presentation.util.toPersianDate
+import io.github.sadeqit.weatherino.presentation.util.forecastToPersianDate
 
 @Composable
 fun WeatherExtraDetails(
     weather: Weather,
-    date: String,
-    modifier: Modifier = Modifier
+    timestamp: Long,
+    timezone: Int,
+    pressureUnit: PressureUnit,
+    precipitationUnit: PrecipitationUnit,
+    modifier: Modifier = Modifier,
 ) {
     GlassCard(
         modifier = modifier
@@ -50,7 +56,10 @@ fun WeatherExtraDetails(
                     )
 
                     Text(
-                        text = date.toPersianDate(),
+                        text = forecastToPersianDate(
+                            timestamp = timestamp,
+                            timezone = timezone,
+                        ),
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -76,9 +85,12 @@ fun WeatherExtraDetails(
 
                 WeatherDetailRow(
                     title1 = "فشار",
-                    value1 = "${weather.pressure} hPa",
+                    value1 = WeatherUnitFormatter.pressure(
+                        hectopascal = weather.pressure,
+                        unit = pressureUnit,
+                    ),
                     title2 = "ابر",
-                    value2 = "${weather.cloudiness}%"
+                    value2 = "${weather.cloudiness}%",
                 )
 
                 Spacer(
@@ -87,9 +99,19 @@ fun WeatherExtraDetails(
 
                 WeatherDetailRow(
                     title1 = "بارش",
-                    value1 = weather.rainOneHour?.let { "$it mm" } ?: "ندارد",
+                    value1 = weather.rainOneHour?.let {
+                        WeatherUnitFormatter.precipitation(
+                            millimeters = it,
+                            unit = precipitationUnit,
+                        )
+                    } ?: "ندارد",
                     title2 = "برف",
-                    value2 = weather.snowOneHour?.let { "$it mm" } ?: "ندارد"
+                    value2 = weather.snowOneHour?.let {
+                        WeatherUnitFormatter.precipitation(
+                            millimeters = it,
+                            unit = precipitationUnit,
+                        )
+                    } ?: "ندارد",
                 )
 
                 Spacer(

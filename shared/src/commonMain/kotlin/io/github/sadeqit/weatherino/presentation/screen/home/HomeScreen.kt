@@ -39,17 +39,19 @@ import io.github.sadeqit.weatherino.presentation.component.weather.HourlyForecas
 import io.github.sadeqit.weatherino.presentation.component.weather.WeatherDetailsRow
 import io.github.sadeqit.weatherino.presentation.component.weather.WeatherExtraDetails
 import io.github.sadeqit.weatherino.presentation.screen.city.CityItem
+import io.github.sadeqit.weatherino.presentation.screen.settings.SettingsUiState
 import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherUiState
 
 @Composable
 fun HomeScreen(
     uiState: WeatherUiState,
+    settingsUiState: SettingsUiState,
     onAirQualityClick: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCitySelected: (City) -> Unit,
     onRetry: () -> Unit,
     onMenuClick: () -> Unit,
-    onLocationClick: () -> Unit
+    onLocationClick: () -> Unit,
 ) {
     var isSearchActive by rememberSaveable {
         mutableStateOf(false)
@@ -178,8 +180,9 @@ fun HomeScreen(
                 CollapsingWeatherCard(
                     weather = weather,
                     collapseProgress = collapseProgress,
+                    temperatureUnit = settingsUiState.temperatureUnit,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 16.dp),
                 )
             }
 
@@ -199,13 +202,16 @@ fun HomeScreen(
                     WeatherDetailsRow(
                         humidity = weather.humidity,
                         windSpeed = weather.windSpeed,
-                        visibility = weather.visibility
+                        visibility = weather.visibility,
+                        windSpeedUnit = settingsUiState.windSpeedUnit,
+                        distanceUnit = settingsUiState.distanceUnit,
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     HourlyForecast(
-                        forecasts = uiState.forecast
+                        forecasts = uiState.forecast,
+                        temperatureUnit = settingsUiState.temperatureUnit,
                     )
 
                     uiState.airQuality?.let { airQuality ->
@@ -220,7 +226,8 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     DailyForecast(
-                        forecasts = uiState.forecast
+                        forecasts = uiState.forecast,
+                        temperatureUnit = settingsUiState.temperatureUnit,
                     )
 
                     uiState.weather.let { weather ->
@@ -229,7 +236,10 @@ fun HomeScreen(
                         uiState.forecast.firstOrNull()?.let { forecast ->
                             WeatherExtraDetails(
                                 weather = weather,
-                                date = forecast.dateTimeText
+                                timestamp = forecast.timestamp,
+                                timezone = forecast.timezone,
+                                pressureUnit = settingsUiState.pressureUnit,
+                                precipitationUnit = settingsUiState.precipitationUnit,
                             )
                         }
                     }

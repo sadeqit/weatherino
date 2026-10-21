@@ -17,8 +17,10 @@ import io.github.sadeqit.weatherino.presentation.screen.air.AirQualityScreen
 import io.github.sadeqit.weatherino.presentation.screen.city.CitySelectionScreen
 import io.github.sadeqit.weatherino.presentation.screen.contact.ContactScreen
 import io.github.sadeqit.weatherino.presentation.screen.home.HomeScreen
+import io.github.sadeqit.weatherino.presentation.screen.settings.SettingsScreen
 import io.github.sadeqit.weatherino.presentation.screen.splash.SplashScreen
 import io.github.sadeqit.weatherino.presentation.screen.support.SupportScreen
+import io.github.sadeqit.weatherino.presentation.viewmodel.SettingsViewModel
 import io.github.sadeqit.weatherino.presentation.viewmodel.SplashViewModel
 import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherViewModel
 import kotlinx.coroutines.launch
@@ -37,6 +39,8 @@ fun AppNavigation(
     val drawerState = rememberDrawerState(
         initialValue = DrawerValue.Closed
     )
+    val settingsViewModel: SettingsViewModel = koinViewModel()
+    val settingsUiState by settingsViewModel.uiState.collectAsStateWithLifecycle()
 
 
 
@@ -131,8 +135,10 @@ fun AppNavigation(
             }
 
             composable<HomeRoute> {
+
                 HomeScreen(
                     uiState = uiState,
+                    settingsUiState = settingsUiState,
                     onAirQualityClick = {
                         navController.navigate(AirQualityRoute)
                     },
@@ -192,6 +198,20 @@ fun AppNavigation(
             }
             composable<SupportRoute> {
                 SupportScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                )
+            }
+            composable<SettingsRoute> {
+                SettingsScreen(
+                    uiState = settingsUiState,
+                    onTemperatureUnitChange = settingsViewModel::setTemperatureUnit,
+                    onWindSpeedUnitChange = settingsViewModel::setWindSpeedUnit,
+                    onPrecipitationUnitChange = settingsViewModel::setPrecipitationUnit,
+                    onPressureUnitChange = settingsViewModel::setPressureUnit,
+                    onDistanceUnitChange = settingsViewModel::setDistanceUnit,
+                    onResetUnits = settingsViewModel::resetUnits,
                     onBackClick = {
                         navController.popBackStack()
                     },

@@ -20,16 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import io.github.sadeqit.weatherino.domain.model.TemperatureUnit
 import io.github.sadeqit.weatherino.domain.model.WeatherForecast
+import io.github.sadeqit.weatherino.domain.util.WeatherUnitFormatter
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
-import io.github.sadeqit.weatherino.presentation.util.toPersianDate
+import io.github.sadeqit.weatherino.presentation.util.forecastLocalTime
+import io.github.sadeqit.weatherino.presentation.util.forecastToPersianDate
 
 @Composable
 fun HourlyForecast(
     forecasts: List<WeatherForecast>,
-    modifier: Modifier = Modifier
+    temperatureUnit: TemperatureUnit,
+    modifier: Modifier = Modifier,
 ) {
     if (forecasts.isEmpty()) return
 
@@ -60,7 +63,8 @@ fun HourlyForecast(
                 forecasts.take(8).forEachIndexed { index, forecast ->
 
                     HourlyForecastItem(
-                        forecast = forecast
+                        forecast = forecast,
+                        temperatureUnit = temperatureUnit,
                     )
 
                     if (index < 7) {
@@ -75,9 +79,11 @@ fun HourlyForecast(
         }
     }
 }
+
 @Composable
 private fun HourlyForecastItem(
-    forecast: WeatherForecast
+    forecast: WeatherForecast,
+    temperatureUnit: TemperatureUnit,
 ) {
     Column(
         modifier = Modifier
@@ -86,18 +92,22 @@ private fun HourlyForecastItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = forecast.dateTimeText.toPersianDate(),
+            text = forecastToPersianDate(
+                timestamp = forecast.timestamp,
+                timezone = forecast.timezone,
+            ),
             color = Color.White,
             style = MaterialTheme.typography.bodySmall
 
         )
 
         Text(
-            text = forecast.dateTimeText
-                .substringAfter(" ")
-                .take(5),
+            text = forecastLocalTime(
+                timestamp = forecast.timestamp,
+                timezone = forecast.timezone,
+            ),
             color = Color.White,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
 
         Spacer(
@@ -117,9 +127,12 @@ private fun HourlyForecastItem(
         )
 
         Text(
-            text = "${forecast.temperature.toInt()}°",
+            text = WeatherUnitFormatter.temperature(
+                celsius = forecast.temperature,
+                unit = temperatureUnit,
+            ),
             color = Color.White,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }

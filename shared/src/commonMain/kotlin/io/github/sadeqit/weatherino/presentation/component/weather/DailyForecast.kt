@@ -18,24 +18,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.github.sadeqit.weatherino.domain.model.TemperatureUnit
 import io.github.sadeqit.weatherino.domain.model.WeatherForecast
+import io.github.sadeqit.weatherino.domain.util.WeatherUnitFormatter
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.theme.GlassBorder
-import io.github.sadeqit.weatherino.presentation.util.toPersianDate
+import io.github.sadeqit.weatherino.presentation.util.forecastLocalDateKey
+import io.github.sadeqit.weatherino.presentation.util.forecastToPersianDate
 
 
 @Composable
 fun DailyForecast(
     forecasts: List<WeatherForecast>,
-    modifier: Modifier = Modifier
+    temperatureUnit: TemperatureUnit,
+    modifier: Modifier = Modifier,
 ) {
+
     if (forecasts.isEmpty()) return
 
     val dailyForecasts = forecasts
-        .groupBy { it.dateTimeText.substringBefore(" ") }
+        .groupBy {
+            forecastLocalDateKey(
+                timestamp = it.timestamp,
+                timezone = it.timezone,
+            )
+        }
         .values
         .take(5)
-
     GlassCard(
         modifier = modifier
     ) {
@@ -59,11 +68,15 @@ fun DailyForecast(
                     val maxTemperature = dayForecasts.maxOf { it.maxTemperature }
 
                     DailyForecastItem(
-                        date = first.dateTimeText.toPersianDate(),
+                        date = forecastToPersianDate(
+                            timestamp = first.timestamp,
+                            timezone = first.timezone,
+                        ),
                         iconCode = first.weatherIcon,
                         description = first.weatherDescription,
                         minTemperature = minTemperature,
-                        maxTemperature = maxTemperature
+                        maxTemperature = maxTemperature,
+                        temperatureUnit = temperatureUnit,
                     )
 
                     if (index < dailyForecasts.lastIndex) {
@@ -87,7 +100,8 @@ private fun DailyForecastItem(
     iconCode: String,
     description: String,
     minTemperature: Double,
-    maxTemperature: Double
+    maxTemperature: Double,
+    temperatureUnit: TemperatureUnit,
 ) {
     Row(
         modifier = Modifier
@@ -114,15 +128,25 @@ private fun DailyForecastItem(
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = "بیشینه ${maxTemperature.toInt()}°",
+                text = "بیشینه \u2067${
+                    WeatherUnitFormatter.temperature(
+                        celsius = maxTemperature,
+                        unit = temperatureUnit,
+                    )
+                }\u2069",
                 color = Color.White,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
 
             Text(
-                text = "کمینه ${minTemperature.toInt()}°",
+                text = "کمینه \u2067${
+                    WeatherUnitFormatter.temperature(
+                        celsius = minTemperature,
+                        unit = temperatureUnit,
+                    )
+                }\u2069",
                 color = Color.White,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
         }
     }

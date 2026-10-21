@@ -12,6 +12,7 @@ import io.github.sadeqit.weatherino.domain.usecase.GetForecastUseCase
 import io.github.sadeqit.weatherino.domain.usecase.GetSavedCityUseCase
 import io.github.sadeqit.weatherino.domain.usecase.SearchCitiesUseCase
 import io.github.sadeqit.weatherino.presentation.viewmodel.CitySelectionViewModel
+import io.github.sadeqit.weatherino.presentation.viewmodel.SettingsViewModel
 import io.github.sadeqit.weatherino.presentation.viewmodel.SplashViewModel
 import io.github.sadeqit.weatherino.presentation.viewmodel.WeatherViewModel
 import org.koin.core.module.Module
@@ -94,6 +95,12 @@ private val domainModule = module {
             searchCitiesUseCase = get(),
             cityPreferences = get(),
             checkNetworkConnection = get()
+        )
+    }
+
+    viewModel {
+        SettingsViewModel(
+            settingsRepository = get()
         )
     }
 

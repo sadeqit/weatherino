@@ -22,7 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.github.sadeqit.weatherino.domain.model.TemperatureUnit
 import io.github.sadeqit.weatherino.domain.model.Weather
+import io.github.sadeqit.weatherino.domain.util.WeatherUnitFormatter
 import io.github.sadeqit.weatherino.presentation.component.glass.GlassCard
 import io.github.sadeqit.weatherino.presentation.util.toPersianWeatherDescription
 
@@ -30,8 +32,17 @@ import io.github.sadeqit.weatherino.presentation.util.toPersianWeatherDescriptio
 fun CollapsingWeatherCard(
     weather: Weather,
     collapseProgress: Float,
-    modifier: Modifier = Modifier
+    temperatureUnit: TemperatureUnit,
+    modifier: Modifier = Modifier,
 ) {
+    val temperature = WeatherUnitFormatter.temperature(
+        celsius = weather.temperature,
+        unit = temperatureUnit,
+    )
+    val temperatureValue = WeatherUnitFormatter.temperatureValue(
+        celsius = weather.temperature,
+        unit = temperatureUnit,
+    )
 
     val weatherDescription = weather.weatherId.toPersianWeatherDescription()
 
@@ -79,7 +90,7 @@ fun CollapsingWeatherCard(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "${weather.temperature.toInt()}°",
+                        text = temperatureValue,
                         color = Color.White,
                         style = MaterialTheme.typography.displayMedium
                     )
@@ -95,7 +106,7 @@ fun CollapsingWeatherCard(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "دمای هوا ${weather.temperature.toInt()} درجه سانتی‌گراد",
+                        text = "\u2066$temperature\u2069 دمای هوا ",
                         color = Color.White,
                         style = MaterialTheme.typography.bodyLarge
                     )
@@ -118,7 +129,7 @@ fun CollapsingWeatherCard(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "${weather.temperature.toInt()}°",
+                            text = temperatureValue,
                             color = Color.White,
                             style = MaterialTheme.typography.headlineLarge
                         )
@@ -131,7 +142,7 @@ fun CollapsingWeatherCard(
                     }
 
                     Text(
-                        text = "دمای هوا ${weather.temperature.toInt()} درجه سانتی‌گراد",
+                        text = "\u2066$temperature\u2069 دمای هوا ",
                         color = Color.White,
                         style = MaterialTheme.typography.bodyMedium
                     )

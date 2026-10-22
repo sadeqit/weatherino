@@ -11,12 +11,18 @@ plugins {
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.kotlinSerialization)
 }
-val localProperties = Properties().apply {
-    load(rootProject.file("local.properties").inputStream())
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use(localProperties::load)
 }
 
-val openWeatherApiKey = localProperties.getProperty("OPENWEATHER_API_KEY")
-    ?: error("OPENWEATHER_API_KEY is missing in local.properties")
+val openWeatherApiKey =
+    localProperties.getProperty("OPENWEATHER_API_KEY")
+        ?: providers.environmentVariable("OPENWEATHER_API_KEY").orNull
+        ?: error("OPENWEATHER_API_KEY is not configured")
 
 buildkonfig {
     packageName = "io.github.sadeqit.weatherino"

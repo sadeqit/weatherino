@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")  // این خط رو می‌تونی حذف کنی
-
 package io.github.sadeqit.weatherino
 
 import androidx.compose.ui.window.Window

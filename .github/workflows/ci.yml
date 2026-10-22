@@ -101,7 +101,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Desktop Tests
-        run: ./gradlew :desktopApp:jvmTest --stacktrace
+        run: ./gradlew :desktopApp:test --stacktrace
 
       - name: Build Desktop
         run: ./gradlew :desktopApp:build --stacktrace

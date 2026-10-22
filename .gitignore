@@ -1,4 +1,3 @@
-```gitignore
 # ==========================================
 # Gradle
 # ==========================================
@@ -14,6 +13,11 @@ gradle-app.setting
 # ==========================================
 .kotlin/
 *.hprof
+konan/
+.kotlin-build/
+*.klib
+*.framework/
+*.xcframework/
 
 # ==========================================
 # Android Studio / IntelliJ IDEA
@@ -63,16 +67,14 @@ captures/
 *.aab
 *.ap_
 *.dex
+androidApp/release/
 
 # ==========================================
-# Kotlin Multiplatform / Native
+# Database files
 # ==========================================
-.kotlin/
-konan/
-.kotlin-build/
-*.klib
-*.framework/
-*.xcframework/
+*.db
+*.db-shm
+*.db-wal
 
 # ==========================================
 # Xcode / iOS
@@ -135,7 +137,3 @@ $RECYCLE.BIN/
 # ==========================================
 **/test-results/
 **/reports/
-```
-*.db
-*.db-shm
-*.db-wal

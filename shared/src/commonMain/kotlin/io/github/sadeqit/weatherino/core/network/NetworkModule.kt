@@ -49,21 +49,9 @@ val networkModule = module {
         )
     }
 
-    single<Settings> {
-        Settings()
-    }
-
-    single {
-        CityPreferences(
-            settings = get()
-        )
-    }
-
     single<SettingsRepository> {
         SettingsRepositoryImpl(
             settings = get()
         )
     }
-
-
 }

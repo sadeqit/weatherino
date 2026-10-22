@@ -9,7 +9,6 @@ import io.github.sadeqit.weatherino.platform.appContext
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         appContext = this
         initAndroidKoin(this)
 
@@ -21,4 +20,5 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
 }

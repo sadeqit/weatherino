@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
@@ -175,7 +176,7 @@ private fun SettingsTopBar(
             .height(64.dp)
             .padding(horizontal = 12.dp),
     ) {
-        androidx.compose.material3.IconButton(
+        IconButton(
             onClick = onBackClick,
             modifier = Modifier.align(Alignment.CenterStart),
         ) {

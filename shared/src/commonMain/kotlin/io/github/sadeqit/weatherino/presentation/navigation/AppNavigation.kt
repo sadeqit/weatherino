@@ -1,5 +1,7 @@
 package io.github.sadeqit.weatherino.presentation.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
@@ -50,14 +52,14 @@ fun AppNavigation(
             WeatherDrawerContent(
                 currentItem = null,
                 onItemClick = { item ->
-                    handleDrawerItem(
-                        item = item,
-                        navController = navController,
-                        onExitClick = onExit
-                    )
-
                     scope.launch {
                         drawerState.close()
+
+                        handleDrawerItem(
+                            item = item,
+                            navController = navController,
+                            onExitClick = onExit
+                        )
                     }
                 }
             )
@@ -65,7 +67,11 @@ fun AppNavigation(
     ) {
         NavHost(
             navController = navController,
-            startDestination = SplashRoute
+            startDestination = SplashRoute,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
         ) {
             composable<SplashRoute> {
                 val splashViewModel: SplashViewModel = koinViewModel()
@@ -153,7 +159,9 @@ fun AppNavigation(
                     onRetry = weatherViewModel::retryWeather,
                     onMenuClick = {
                         scope.launch {
-                            drawerState.open()
+                            if (drawerState.isClosed && !drawerState.isAnimationRunning) {
+                                drawerState.open()
+                            }
                         }
                     },
                     onLocationClick = {
@@ -176,7 +184,7 @@ fun AppNavigation(
                     AirQualityScreen(
                         airQuality = airQuality,
                         onBackClick = {
-                            navController.popBackStack()
+                             navController.navigateUp()
                         }
                     )
                 }
@@ -185,21 +193,21 @@ fun AppNavigation(
             composable<ContactRoute> {
                 ContactScreen(
                     onBackClick = {
-                        navController.popBackStack()
+                         navController.navigateUp()
                     },
                 )
             }
             composable<AboutRoute> {
                 AboutScreen(
                     onBackClick = {
-                        navController.popBackStack()
+                         navController.navigateUp()
                     },
                 )
             }
             composable<SupportRoute> {
                 SupportScreen(
                     onBackClick = {
-                        navController.popBackStack()
+                         navController.navigateUp()
                     },
                 )
             }
@@ -213,7 +221,7 @@ fun AppNavigation(
                     onDistanceUnitChange = settingsViewModel::setDistanceUnit,
                     onResetUnits = settingsViewModel::resetUnits,
                     onBackClick = {
-                        navController.popBackStack()
+                         navController.navigateUp()
                     },
                 )
             }

@@ -452,4 +452,4 @@ GitHub: [@sadeqit](https://github.com/sadeqit)
 
 ## 📄 License
 
-License information will be added in a future release.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

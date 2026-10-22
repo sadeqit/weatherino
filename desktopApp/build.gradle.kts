@@ -35,9 +35,6 @@ compose.desktop {
             description = "Weatherino Weather Application"
             vendor = "Sadeq IT"
 
-            windows {
-                iconFile.set(project.file("icons/icon.ico"))
-            }
         }
     }
 }

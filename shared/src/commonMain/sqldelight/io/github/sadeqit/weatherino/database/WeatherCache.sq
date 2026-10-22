@@ -1,0 +1,82 @@
+CREATE TABLE WeatherCache (
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+
+    locationName TEXT NOT NULL,
+    country TEXT NOT NULL,
+
+    temperature REAL NOT NULL,
+    feelsLike REAL NOT NULL,
+    minTemperature REAL NOT NULL,
+    maxTemperature REAL NOT NULL,
+
+    humidity INTEGER NOT NULL,
+    pressure INTEGER NOT NULL,
+    visibility INTEGER,
+
+    windSpeed REAL NOT NULL,
+    windDirection INTEGER,
+    windGust REAL,
+
+    cloudiness INTEGER NOT NULL,
+
+    rainOneHour REAL,
+    rainThreeHours REAL,
+
+    snowOneHour REAL,
+    snowThreeHours REAL,
+
+    weatherId INTEGER NOT NULL,
+    weatherMain TEXT NOT NULL,
+    weatherDescription TEXT NOT NULL,
+    weatherIcon TEXT NOT NULL,
+
+    sunrise INTEGER,
+    sunset INTEGER,
+
+    timestamp INTEGER NOT NULL,
+    timezone INTEGER NOT NULL,
+
+    PRIMARY KEY (latitude, longitude)
+);
+
+getWeather:
+SELECT *
+FROM WeatherCache
+WHERE latitude = ? AND longitude = ?;
+
+insertWeather:
+INSERT OR REPLACE INTO WeatherCache (
+    latitude,
+    longitude,
+    locationName,
+    country,
+    temperature,
+    feelsLike,
+    minTemperature,
+    maxTemperature,
+    humidity,
+    pressure,
+    visibility,
+    windSpeed,
+    windDirection,
+    windGust,
+    cloudiness,
+    rainOneHour,
+    rainThreeHours,
+    snowOneHour,
+    snowThreeHours,
+    weatherId,
+    weatherMain,
+    weatherDescription,
+    weatherIcon,
+    sunrise,
+    sunset,
+    timestamp,
+    timezone
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteWeather:
+DELETE FROM WeatherCache
+WHERE latitude = ? AND longitude = ?;

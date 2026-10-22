@@ -1,0 +1,45 @@
+CREATE TABLE AirQualityCache (
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+
+    timestamp INTEGER NOT NULL,
+
+    aqi INTEGER NOT NULL,
+
+    carbonMonoxide REAL NOT NULL,
+    nitricOxide REAL NOT NULL,
+    nitrogenDioxide REAL NOT NULL,
+    ozone REAL NOT NULL,
+    sulfurDioxide REAL NOT NULL,
+    pm2_5 REAL NOT NULL,
+    pm10 REAL NOT NULL,
+    ammonia REAL NOT NULL,
+
+    PRIMARY KEY (latitude, longitude)
+);
+
+getAirQuality:
+SELECT *
+FROM AirQualityCache
+WHERE latitude = ? AND longitude = ?;
+
+insertAirQuality:
+INSERT OR REPLACE INTO AirQualityCache (
+    latitude,
+    longitude,
+    timestamp,
+    aqi,
+    carbonMonoxide,
+    nitricOxide,
+    nitrogenDioxide,
+    ozone,
+    sulfurDioxide,
+    pm2_5,
+    pm10,
+    ammonia
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteAirQuality:
+DELETE FROM AirQualityCache
+WHERE latitude = ? AND longitude = ?;

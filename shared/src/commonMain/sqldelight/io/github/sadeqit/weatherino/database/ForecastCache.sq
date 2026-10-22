@@ -1,0 +1,68 @@
+CREATE TABLE ForecastCache (
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    timestamp INTEGER NOT NULL,
+
+    temperature REAL NOT NULL,
+    feelsLike REAL NOT NULL,
+    minTemperature REAL NOT NULL,
+    maxTemperature REAL NOT NULL,
+
+    humidity INTEGER NOT NULL,
+    pressure INTEGER NOT NULL,
+    visibility INTEGER,
+
+    precipitationProbability REAL NOT NULL,
+
+    rainThreeHours REAL,
+    snowThreeHours REAL,
+
+    windSpeed REAL,
+    windDirection INTEGER,
+    cloudiness INTEGER,
+
+    weatherId INTEGER NOT NULL,
+    weatherMain TEXT NOT NULL,
+    weatherDescription TEXT NOT NULL,
+    weatherIcon TEXT NOT NULL,
+
+    timezone INTEGER NOT NULL,
+
+    PRIMARY KEY (latitude, longitude, timestamp)
+);
+
+getForecast:
+SELECT *
+FROM ForecastCache
+WHERE latitude = ? AND longitude = ?
+ORDER BY timestamp ASC;
+
+insertForecast:
+INSERT OR REPLACE INTO ForecastCache (
+    latitude,
+    longitude,
+    timestamp,
+    temperature,
+    feelsLike,
+    minTemperature,
+    maxTemperature,
+    humidity,
+    pressure,
+    visibility,
+    precipitationProbability,
+    rainThreeHours,
+    snowThreeHours,
+    windSpeed,
+    windDirection,
+    cloudiness,
+    weatherId,
+    weatherMain,
+    weatherDescription,
+    weatherIcon,
+    timezone
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteForecast:
+DELETE FROM ForecastCache
+WHERE latitude = ? AND longitude = ?;

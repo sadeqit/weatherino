@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -9,6 +11,7 @@ plugins {
 dependencies {
     implementation(project(":shared"))
 
+    implementation(compose.components.resources)
     implementation(compose.desktop.currentOs)
     implementation(libs.kotlinx.coroutinesSwing)
 
@@ -20,9 +23,18 @@ compose.desktop {
         mainClass = "io.github.sadeqit.weatherino.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "io.github.sadeqit.weatherino"
+            targetFormats(
+                TargetFormat.Dmg,
+                TargetFormat.Msi,
+                TargetFormat.Deb
+            )
+
+            packageName = "Weatherino"
             packageVersion = "1.0.0"
+
+            description = "Weatherino Weather Application"
+            vendor = "Sadeq IT"
+
         }
     }
 }

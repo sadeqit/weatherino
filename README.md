@@ -2,9 +2,9 @@
 
 A modern cross-platform weather application built with **Kotlin Multiplatform** and **Compose Multiplatform**.
 
-Weatherino provides current weather conditions, forecasts, air quality information, city search, and location-based weather data using the **OpenWeatherMap API**, with local caching for a smoother experience.
+Weatherino provides current weather conditions, forecasts, air quality information, city search, and location-based weather data using the **OpenWeatherMap API**, with local caching for a smoother and more reliable experience.
 
-> A portfolio project focused on modern Kotlin development, clean architecture, cross-platform UI, networking, local persistence, and scalable application structure.
+> A portfolio project focused on modern Kotlin development, Clean Architecture, multiplatform UI, networking, local persistence, dependency injection, and maintainable application design.
 
 ---
 
@@ -37,17 +37,19 @@ Weatherino provides current weather conditions, forecasts, air quality informati
 - 🌫️ Air quality and AQI information
 - 🔎 City search with geocoding
 - 📍 Location-based weather on Android
-- 💾 Local weather and forecast caching
+- 💾 Local weather, forecast, and air-quality caching
 - 🏙️ Selected city persistence
 - 🌧️ Precipitation information
 - 💨 Wind speed and direction
 - 💧 Humidity and atmospheric pressure
+- 👁️ Visibility information
 - 🌅 Sunrise and sunset information
-- 🌡️ Temperature, feels-like, minimum and maximum temperatures
+- 🌡️ Current, feels-like, minimum, and maximum temperatures
 - 🎨 Glassmorphism-inspired UI
 - 🌐 RTL support
 - 📱 Android application
 - 🖥️ Desktop application
+- 🔌 Offline-friendly cached weather data
 
 ---
 
@@ -77,6 +79,7 @@ Weatherino provides current weather conditions, forecasts, air quality informati
 - **Koin** for Dependency Injection
 - **Repository Pattern**
 - **Use Case Pattern**
+- Platform-specific implementations
 
 ### Networking
 
@@ -91,27 +94,34 @@ Weatherino provides current weather conditions, forecasts, air quality informati
 
 ### Platform Services
 
-- **Google Play Services Location** — Android location
+- **Google Play Services Location** — Android location services
 - **BuildKonfig** — build-time configuration
 - **Kermit** — multiplatform logging
+
+### Build & Tooling
+
+- **Gradle**
+- **Gradle Version Catalog**
+- **GitHub Actions**
+- **JDK 21**
 
 ---
 
 ## 🏗️ Architecture
 
-Weatherino follows **Clean Architecture** with an **MVVM** presentation layer.
+Weatherino follows **Clean Architecture** with **MVVM** for presentation logic.
 
 ```text
 ┌─────────────────────────────────────┐
-│              UI Layer               │
+│               UI Layer              │
 │        Compose Multiplatform        │
-│     Screens • Components • Nav      │
+│      Screens • Components • Nav     │
 └──────────────────┬──────────────────┘
                    │
 ┌──────────────────▼──────────────────┐
 │          Presentation Layer         │
 │              ViewModels             │
-│          State • Events • UI        │
+│           State • Events • UI       │
 └──────────────────┬──────────────────┘
                    │
 ┌──────────────────▼──────────────────┐
@@ -122,14 +132,16 @@ Weatherino follows **Clean Architecture** with an **MVVM** presentation layer.
                    │
 ┌──────────────────▼──────────────────┐
 │              Data Layer             │
-│ Repository • Remote • Local Cache   │
-│         Ktor • SQLDelight           │
+│     Repository • Remote • Local     │
+│          Ktor • SQLDelight          │
 └─────────────────────────────────────┘
 ```
 
-The shared module contains the application's common business logic, domain models, repositories, use cases, ViewModels, and most of the Compose UI.
+The `shared` module contains the majority of the application's business logic, domain models, repositories, use cases, ViewModels, and Compose UI.
 
 Platform-specific source sets provide implementations for functionality that depends on the underlying platform.
+
+This structure keeps the business logic independent from Android and Desktop APIs while allowing each platform to provide its own required implementations.
 
 ---
 
@@ -144,13 +156,21 @@ The application consumes:
 - Geocoding API
 - Air Pollution API
 
-Remote DTOs are mapped into domain models before reaching the presentation layer.
+Remote API responses are represented by platform-independent DTOs and mapped into domain models before reaching the presentation layer.
 
-### Local caching
+This keeps the domain and UI layers independent from the external API response structure.
 
-Weatherino uses **SQLDelight** to cache weather and forecast data locally.
+### Local Caching
 
-The cache allows the application to retain recently fetched data and reduces unnecessary network requests.
+Weatherino uses **SQLDelight** for persistent local caching.
+
+The application stores:
+
+- Current weather data
+- Forecast data
+- Air quality data
+
+Cached data allows the application to retain recently fetched information and provides a better experience when network connectivity is unavailable or limited.
 
 City-related preferences are stored using **Multiplatform Settings**.
 
@@ -158,93 +178,201 @@ City-related preferences are stored using **Multiplatform Settings**.
 
 ## 📦 Project Structure
 
+Weatherino is organized as a Kotlin Multiplatform project with separate Android and Desktop applications backed by a shared module.
+
 ```text
 Weatherino/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                       # GitHub Actions workflow
 │
-├── androidApp/
-│   └── Android application entry point
+├── androidApp/                          # Android application
+├── desktopApp/                          # Desktop/JVM application
 │
-├── desktopApp/
-│   └── Desktop/JVM application entry point
-│
-├── shared/
+├── shared/                              # Shared KMP module
 │   ├── src/
 │   │   ├── commonMain/
-│   │   │   ├── core/
-│   │   │   │   ├── common/
-│   │   │   │   ├── database/
-│   │   │   │   ├── di/
-│   │   │   │   ├── network/
-│   │   │   │   └── ...
+│   │   │   ├── kotlin/io/github/sadeqit/weatherino/
+│   │   │   │   ├── core/               # Infrastructure & utilities
+│   │   │   │   ├── data/               # Remote/local data & repositories
+│   │   │   │   ├── domain/             # Business logic
+│   │   │   │   ├── platform/           # Platform abstractions
+│   │   │   │   └── presentation/       # UI, navigation & ViewModels
 │   │   │   │
-│   │   │   ├── data/
-│   │   │   │   ├── local/
-│   │   │   │   ├── remote/
-│   │   │   │   └── repository/
-│   │   │   │
-│   │   │   ├── domain/
-│   │   │   │   ├── model/
-│   │   │   │   ├── repository/
-│   │   │   │   └── usecase/
-│   │   │   │
-│   │   │   ├── presentation/
-│   │   │   │   ├── navigation/
-│   │   │   │   ├── screen/
-│   │   │   │   ├── ui/
-│   │   │   │   ├── util/
-│   │   │   │   └── viewmodel/
-│   │   │   │
-│   │   │   └── composeResources/
+│   │   │   ├── composeResources/       # Fonts & drawable resources
+│   │   │   └── sqldelight/             # SQLDelight schemas
 │   │   │
-│   │   ├── androidMain/
-│   │   │   └── Android-specific implementations
-│   │   │
-│   │   └── jvmMain/
-│   │       └── Desktop/JVM-specific implementations
+│   │   ├── androidMain/                # Android implementations
+│   │   ├── jvmMain/                    # Desktop/JVM implementations
+│   │   ├── commonTest/                 # Shared tests
+│   │   ├── androidHostTest/            # Android host tests
+│   │   └── jvmTest/                    # Desktop/JVM tests
 │   │
-│   └── sqldelight/
-│       └── io/github/sadeqit/weatherino/database/
-│           ├── WeatherCache.sq
-│           ├── ForecastCache.sq
-│           └── ...
+│   └── build.gradle.kts
+│
+├── docs/
+│   └── screenshots/                    # README screenshots
 │
 ├── gradle/
-│   └── libs.versions.toml
+│   ├── libs.versions.toml              # Dependency versions
+│   ├── gradle-daemon-jvm.properties    # JVM toolchain configuration
+│   └── wrapper/                        # Gradle Wrapper
 │
-├── local.properties
+├── .gitignore
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+├── LICENSE
 └── README.md
 ```
 
-### `core`
+### Shared Module
 
-Contains cross-cutting infrastructure such as dependency injection, database configuration, networking, platform abstractions, and shared utilities.
+Most of the application lives inside:
 
-### `data`
+```text
+shared/src/commonMain/kotlin/io/github/sadeqit/weatherino/
+```
 
-Contains remote API models, local data sources, cache implementations, DTO mappers, and repository implementations.
+The module is organized into several architectural areas.
 
-### `domain`
+### `core/`
 
-Contains business logic that is independent of external frameworks:
+Contains shared infrastructure and cross-cutting functionality:
 
-- Domain models
-- Repository contracts
-- Use cases
+```text
+core/
+├── common/          # Koin setup & application modules
+├── database/        # SQLDelight database configuration
+├── network/         # Ktor HTTP client & network checking
+└── util/            # Shared utilities
+```
 
-### `presentation`
+### `data/`
 
-Contains the UI and presentation logic:
+Responsible for remote communication, local persistence, mapping, caching, and repository implementations.
 
-- Screens
-- ViewModels
-- Navigation
-- UI components
-- UI utilities
-- Application state
+```text
+data/
+├── local/           # Cache data sources & city preferences
+├── model/           # DTO-to-domain mappers
+├── remote/
+│   ├── api/         # OpenWeatherMap API
+│   └── model/       # Network DTOs
+└── repository/      # Repository implementations
+```
 
-### `sqldelight`
+### `domain/`
 
-Contains the `.sq` database definitions used to generate the SQLDelight database layer.
+Contains framework-independent business logic:
+
+```text
+domain/
+├── model/           # Weather, forecast, city, AQI & units
+├── repository/      # Repository contracts
+└── usecase/         # Application use cases
+```
+
+Use cases handle operations such as:
+
+- Retrieving current weather
+- Retrieving forecasts
+- Retrieving air quality
+- Searching cities
+- Reading cached data
+- Checking network connectivity
+- Restoring the saved city
+
+### `presentation/`
+
+Contains the shared Compose Multiplatform UI and presentation logic.
+
+```text
+presentation/
+├── component/
+│   ├── air/         # Air-quality components
+│   ├── background/  # Weather background
+│   ├── drawer/      # Navigation drawer
+│   ├── glass/       # Glassmorphism components
+│   ├── home/        # Home components
+│   └── weather/     # Forecasts & weather details
+│
+├── navigation/      # Routes & application navigation
+├── screen/
+│   ├── about/
+│   ├── air/
+│   ├── city/
+│   ├── contact/
+│   ├── home/
+│   ├── settings/
+│   ├── splash/
+│   └── support/
+│
+├── theme/           # Colors, typography, shapes & theme
+└── viewmodel/       # ViewModels & UI states
+```
+
+### Platform-Specific Code
+
+Platform-dependent functionality is isolated in the platform source sets.
+
+#### Android
+
+```text
+androidMain/kotlin/io/github/sadeqit/weatherino/
+├── Platform.android.kt
+├── core/
+│   ├── common/                      # Android Koin setup
+│   ├── database/                    # Android database module
+│   ├── di/                          # Location & network modules
+│   └── network/                     # Android network checker
+├── data/local/                      # Android SQLDelight driver
+└── platform/
+    ├── location/                    # Android location services
+    ├── app/                         # Android app lifecycle/exit handling
+    ├── OpenLink.android.kt
+    └── RateApp.android.kt
+```
+
+#### Desktop / JVM
+
+```text
+jvmMain/kotlin/io/github/sadeqit/weatherino/
+├── Platform.jvm.kt
+├── core/
+│   ├── common/                      # JVM platform modules
+│   ├── database/                    # JVM database module
+│   └── network/                     # JVM network checker
+├── data/local/                      # SQLite JVM driver
+└── platform/
+    ├── location/                    # Desktop location implementation
+    ├── app/                         # Desktop app exit handling
+    ├── OpenLink.jvm.kt
+    └── RateApp.jvm.kt
+```
+
+This separation keeps platform-specific APIs outside the shared business logic while allowing the common application layer to remain multiplatform.
+
+---
+
+## 🗄️ Database
+
+Weatherino uses **SQLDelight** with three cache schemas:
+
+```text
+shared/src/commonMain/sqldelight/io/github/sadeqit/weatherino/database/
+├── WeatherCache.sq
+├── ForecastCache.sq
+└── AirQualityCache.sq
+```
+
+These schemas provide persistent caching for:
+
+- Current weather
+- Weather forecasts
+- Air quality
+
+SQLDelight generates the database access layer while keeping the SQL schema explicit and type-safe.
 
 ---
 
@@ -260,7 +388,7 @@ OPENWEATHER_API_KEY=YOUR_API_KEY
 
 The key is read during the build and exposed to the shared module through **BuildKonfig**.
 
-`local.properties` contains environment-specific values and should **not be committed to the repository**.
+`local.properties` contains environment-specific configuration and must not be committed to the repository.
 
 > Never commit a real API key to Git.
 
@@ -268,15 +396,15 @@ The key is read during the build and exposed to the shared module through **Buil
 
 Android location functionality uses **Google Play Services Location**.
 
-The Android application requires location permissions in the manifest and requests the appropriate runtime permission when location-based weather is used.
+The Android application requests the required runtime location permission when location-based weather is used.
 
 No `google-services.json` file is required because Weatherino does not use Firebase or the Google Services Gradle Plugin.
 
-### Desktop Location
+### Desktop
 
-The Desktop/JVM version does not use Android's Google Play Services Location API.
+Desktop provides its own platform-specific implementation for location-related functionality through the `jvmMain` source set.
 
-Location-based weather is therefore an **Android-specific feature**. On Desktop, users can use the city search functionality to select a location.
+The shared application layer does not depend directly on Android location APIs.
 
 ---
 
@@ -289,14 +417,18 @@ Location-based weather is therefore an **Android-specific feature**. On Desktop,
 - Android SDK
 - OpenWeatherMap API key
 
-Clone the repository:
+### Clone
 
 ```bash
 git clone https://github.com/sadeqit/weatherino.git
 cd weatherino
 ```
 
-Configure the API key in `local.properties`, then build the application.
+Create `local.properties` and add your OpenWeatherMap API key:
+
+```properties
+OPENWEATHER_API_KEY=YOUR_API_KEY
+```
 
 ---
 
@@ -310,7 +442,7 @@ Build the Android debug APK:
 ./gradlew :androidApp:assembleDebug
 ```
 
-Windows:
+On Windows:
 
 ```powershell
 .\gradlew.bat :androidApp:assembleDebug
@@ -324,7 +456,7 @@ Run the Desktop application:
 ./gradlew :desktopApp:run
 ```
 
-Windows:
+On Windows:
 
 ```powershell
 .\gradlew.bat :desktopApp:run
@@ -334,16 +466,22 @@ Windows:
 
 ## 🔄 CI/CD
 
-Weatherino uses **GitHub Actions** to automate project validation and build tasks.
+Weatherino includes a **GitHub Actions** workflow for automated project validation.
 
-The CI pipeline is intended to verify:
+```text
+.github/
+└── workflows/
+    └── ci.yml
+```
+
+The workflow covers project validation such as:
 
 - Shared module tests
 - Android build
 - Desktop build
-- Multiplatform project compilation
+- Multiplatform compilation
 
-Sensitive configuration such as the OpenWeatherMap API key is kept outside the repository and is not committed to source control.
+Sensitive configuration, including the OpenWeatherMap API key, is kept outside the repository and is not committed to source control.
 
 ---
 
@@ -351,33 +489,45 @@ Sensitive configuration such as the OpenWeatherMap API key is kept outside the r
 
 ### Kotlin Multiplatform Dependency Injection
 
-One of the challenges was designing dependency injection so that shared code could use **Koin** while platform-specific dependencies could still be provided by Android and Desktop implementations.
+A key challenge was designing dependency injection so that shared code could use **Koin** while platform-specific dependencies could still be provided independently by Android and Desktop.
 
-Platform modules provide their required dependencies while the shared layer remains platform-independent.
+Platform modules provide their required implementations while the shared layer remains platform-independent.
 
 ### Local Weather Caching
 
-Weather data is remote and can change frequently, while unnecessary network requests should be avoided.
+Weather data changes frequently, but repeatedly requesting the same data is unnecessary.
 
-Weatherino uses **SQLDelight** to persist weather and forecast data locally. Repository logic determines when remote data should be requested and when cached data can be used.
+Weatherino uses **SQLDelight** to persist weather, forecast, and air-quality data locally.
+
+The repository layer coordinates remote data and cached data to provide a more resilient experience when network connectivity is limited.
 
 ### Platform-Specific Location
 
-Android provides location services through Google Play Services, while the Desktop/JVM target does not have the same platform APIs.
+Location APIs differ significantly between platforms.
 
-The location implementation is therefore isolated behind platform-specific code instead of coupling the shared business logic to Android APIs.
+Android uses **Google Play Services Location**, while Desktop requires its own platform-specific implementation.
+
+Weatherino isolates this functionality behind platform abstractions instead of coupling the shared business logic directly to Android APIs.
 
 ### Shared UI and Business Logic
 
-Weatherino uses Compose Multiplatform to share UI while keeping platform-specific functionality isolated.
+**Compose Multiplatform** allows Weatherino to share a significant amount of UI and application logic between Android and Desktop.
 
-This allows the same application architecture to support Android and Desktop without duplicating the core business logic.
+Platform-specific functionality remains isolated while the main application architecture stays consistent across targets.
 
 ### API DTO to Domain Mapping
 
 OpenWeatherMap responses are represented by network-specific DTOs.
 
-These DTOs are mapped into domain models so that the rest of the application does not depend directly on the external API response structure.
+These DTOs are mapped into domain models before being consumed by the rest of the application.
+
+This prevents external API structures from leaking into the domain and presentation layers.
+
+### Multiplatform Persistence
+
+Another challenge was providing persistent storage across platforms while keeping the repository layer platform-independent.
+
+SQLDelight provides a shared database API while platform-specific drivers are supplied by Android and JVM implementations.
 
 ---
 
@@ -385,12 +535,30 @@ These DTOs are mapped into domain models so that the rest of the application doe
 
 The project includes multiplatform test support for shared and platform-specific code.
 
+```text
+commonTest/          # Shared tests
+androidHostTest/     # Android-specific tests
+jvmTest/             # Desktop/JVM-specific tests
+```
+
+Current tests cover areas including:
+
+- Weather use cases
+- Forecast use cases
+- Air-quality use cases
+- Weather repository behavior
+- City repository behavior
+- Weather ViewModel
+- City selection ViewModel
+
 Example Gradle tasks:
 
 ```bash
 ./gradlew :shared:testAndroidHostTest
 ./gradlew :shared:jvmTest
 ```
+
+> Test coverage will continue to expand as the project evolves.
 
 ---
 
@@ -400,43 +568,46 @@ Example Gradle tasks:
 |---|---|
 | Android | ✅ Primary |
 | Desktop (JVM) | ✅ Supported |
-| Web | 🚫 Not currently maintained |
+| Web | ✅ Supported |
 | iOS | — |
 
-Android is the primary production target.
+**Android is the primary production target.**
 
-Desktop support is provided as a cross-platform JVM implementation and portfolio demonstration.
+Desktop support demonstrates the multiplatform architecture and provides a JVM-based version of the application.
 
 ---
 
 ## 🎯 What This Project Demonstrates
 
-Weatherino was built to gain practical experience with modern Kotlin development rather than simply demonstrate a collection of libraries.
+Weatherino was built as a practical Kotlin Multiplatform project rather than simply as a collection of libraries.
 
-Key outcomes include:
+It demonstrates:
 
 - Building a real application with **Kotlin Multiplatform**
 - Sharing business logic across platforms
 - Sharing Compose UI between Android and Desktop
-- Applying **Clean Architecture** to a multiplatform project
+- Applying **Clean Architecture** to a multiplatform application
+- Implementing **MVVM** with shared ViewModels
 - Managing dependencies with **Koin**
 - Building a networking layer with **Ktor**
-- Designing a local persistence and caching layer with **SQLDelight**
+- Working with REST APIs and DTO mapping
+- Designing a local persistence layer with **SQLDelight**
+- Implementing caching for remote weather data
 - Integrating Android location services
-- Working with external REST APIs
 - Handling platform-specific implementations
-- Building a modern Compose-based UI
+- Building reusable Compose UI components
+- Designing a glassmorphism-inspired interface
 - Structuring a project for maintainability and future expansion
 
 ---
 
 ## 📌 Project Status
 
-Weatherino is currently developed as a portfolio project with **Android as the primary target** and Desktop support for cross-platform development and demonstration.
+Weatherino is currently a **portfolio project** with **Android as the primary target** and Desktop support as a cross-platform JVM implementation.
 
 The Android release build is configured for signed production builds.
 
-A public Café Bazaar release will be added when the application is published.
+The application is not currently published on Café Bazaar. A public store release will be added when the application is officially published.
 
 ---
 
@@ -452,4 +623,6 @@ GitHub: [@sadeqit](https://github.com/sadeqit)
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**.
+
+See the [LICENSE](LICENSE) file for details.

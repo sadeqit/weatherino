@@ -1,4 +1,3 @@
-```yaml
 name: Weatherino CI
 
 on:
@@ -100,4 +99,3 @@ jobs:
 
       - name: Build Desktop
         run: ./gradlew :desktopApp:build --stacktrace
-```

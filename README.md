@@ -12,21 +12,17 @@ Weatherino provides current weather conditions, forecasts, air quality informati
 
 ### Android
 
-| Home | Forecast |
-|:---:|:---:|
-| <img src="docs/screenshots/android-home.png" width="300"> | <img src="docs/screenshots/android-forecast.png" width="300"> |
+| City Selection | Home | Forecast |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/android-city-selection.jpg" width="250"> | <img src="docs/screenshots/android-home.jpg" width="250"> | <img src="docs/screenshots/android-forecast.jpg" width="250"> |
 
-| Air Quality | City Search |
-|:---:|:---:|
-| <img src="docs/screenshots/android-air-quality.png" width="300"> | <img src="docs/screenshots/android-city-search.png" width="300"> |
-
-| Navigation Drawer | Settings |
-|:---:|:---:|
-| <img src="docs/screenshots/android-drawer.png" width="300"> | <img src="docs/screenshots/android-settings.png" width="300"> |
+| Air Quality | Navigation Drawer | Settings |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/android-air-quality.jpg" width="250"> | <img src="docs/screenshots/android-drawer.jpg" width="250"> | <img src="docs/screenshots/android-settings.jpg" width="250"> |
 
 ### Desktop
 
-<img src="docs/screenshots/desktop-home.png" width="800">
+<img src="docs/screenshots/desktop-home.png" width="600">
 
 ---
 
@@ -49,6 +45,7 @@ Weatherino provides current weather conditions, forecasts, air quality informati
 - 🌐 RTL support
 - 📱 Android application
 - 🖥️ Desktop application
+- 🌐 Web application
 - 🔌 Offline-friendly cached weather data
 
 ---
@@ -57,7 +54,7 @@ Weatherino provides current weather conditions, forecasts, air quality informati
 
 ### Core
 
-- **Kotlin 2.4**
+- **Kotlin 2.4.20
 - **Kotlin Multiplatform**
 - **Compose Multiplatform**
 - **Kotlin Coroutines & Flow**
@@ -141,7 +138,7 @@ The `shared` module contains the majority of the application's business logic, d
 
 Platform-specific source sets provide implementations for functionality that depends on the underlying platform.
 
-This structure keeps the business logic independent from Android and Desktop APIs while allowing each platform to provide its own required implementations.
+This structure keeps the business logic independent from platform APIs while allowing each platform to provide its own required implementations.
 
 ---
 
@@ -178,7 +175,7 @@ City-related preferences are stored using **Multiplatform Settings**.
 
 ## 📦 Project Structure
 
-Weatherino is organized as a Kotlin Multiplatform project with separate Android and Desktop applications backed by a shared module.
+Weatherino is organized as a Kotlin Multiplatform project with separate Android, Desktop, and Web applications backed by a shared module.
 
 ```text
 Weatherino/
@@ -188,6 +185,7 @@ Weatherino/
 │
 ├── androidApp/                          # Android application
 ├── desktopApp/                          # Desktop/JVM application
+├── webApp/                              # Web application
 │
 ├── shared/                              # Shared KMP module
 │   ├── src/
@@ -204,6 +202,8 @@ Weatherino/
 │   │   │
 │   │   ├── androidMain/                # Android implementations
 │   │   ├── jvmMain/                    # Desktop/JVM implementations
+│   │   ├── jsMain/                     # JavaScript Web implementations
+│   │   ├── wasmJsMain/                 # WebAssembly implementations
 │   │   ├── commonTest/                 # Shared tests
 │   │   ├── androidHostTest/            # Android host tests
 │   │   └── jvmTest/                    # Desktop/JVM tests
@@ -225,16 +225,6 @@ Weatherino/
 ├── LICENSE
 └── README.md
 ```
-
-### Shared Module
-
-Most of the application lives inside:
-
-```text
-shared/src/commonMain/kotlin/io/github/sadeqit/weatherino/
-```
-
-The module is organized into several architectural areas.
 
 ### `core/`
 
@@ -380,17 +370,27 @@ SQLDelight generates the database access layer while keeping the SQL schema expl
 
 Weatherino requires an **OpenWeatherMap API key**.
 
-Create a `local.properties` file in the project root:
+### OpenWeatherMap API Key
+
+1. Go to [OpenWeatherMap](https://openweathermap.org/) and create an account or sign in.
+2. Open **My API keys** from your account.
+3. Create a new API key and copy the generated key.
+4. Create a `local.properties` file in the project root, next to `settings.gradle.kts`.
+5. Add your API key:
 
 ```properties
 OPENWEATHER_API_KEY=YOUR_API_KEY
 ```
+
+Replace `YOUR_API_KEY` with your actual OpenWeatherMap API key.
 
 The key is read during the build and exposed to the shared module through **BuildKonfig**.
 
 `local.properties` contains environment-specific configuration and must not be committed to the repository.
 
 > Never commit a real API key to Git.
+
+> Newly created OpenWeatherMap API keys may take some time to become active.
 
 ### Android Location
 
@@ -406,8 +406,13 @@ Desktop provides its own platform-specific implementation for location-related f
 
 The shared application layer does not depend directly on Android location APIs.
 
----
+### Web
 
+The Web application accesses the OpenWeatherMap API from the browser, which means the API key can potentially be exposed to users.
+
+For production Web deployments, the API key should be restricted appropriately or requests should be routed through a secure backend/proxy.
+
+---
 ## 🚀 Getting Started
 
 ### Requirements
@@ -460,6 +465,32 @@ On Windows:
 
 ```powershell
 .\gradlew.bat :desktopApp:run
+```
+
+### Web
+
+Run the Web application using JavaScript:
+
+```bash
+./gradlew :webApp:jsBrowserDevelopmentRun
+```
+
+On Windows:
+
+```powershell
+.\gradlew.bat :webApp:jsBrowserDevelopmentRun
+```
+
+Or using WebAssembly:
+
+```bash
+./gradlew :webApp:wasmJsBrowserDevelopmentRun
+```
+
+On Windows:
+
+```powershell
+.\gradlew.bat :webApp:wasmJsBrowserDevelopmentRun
 ```
 
 ---
@@ -585,7 +616,7 @@ It demonstrates:
 
 - Building a real application with **Kotlin Multiplatform**
 - Sharing business logic across platforms
-- Sharing Compose UI between Android and Desktop
+- Sharing Compose UI between Android and Desktop and Web
 - Applying **Clean Architecture** to a multiplatform application
 - Implementing **MVVM** with shared ViewModels
 - Managing dependencies with **Koin**
@@ -613,7 +644,7 @@ The application is not currently published on Café Bazaar. A public store relea
 
 ## 👨‍💻 Author
 
-**Sadegh Yazdi**
+**Sadegh IT**
 
 Android Developer | Kotlin | Jetpack Compose
 

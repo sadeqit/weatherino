@@ -59,7 +59,8 @@ fun DailyForecast(
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
-                    color = GlassBorder
+                    color = GlassBorder,
+                    thickness = 2.dp
                 )
 
                 dailyForecasts.forEachIndexed { index, dayForecasts ->

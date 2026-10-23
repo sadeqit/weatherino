@@ -2,8 +2,10 @@ package io.github.sadeqit.weatherino.presentation.component.weather
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.github.sadeqit.weatherino.domain.model.PrecipitationUnit
@@ -43,14 +46,14 @@ fun WeatherExtraDetails(
             LocalLayoutDirection provides LayoutDirection.Rtl
         ) {
             Column {
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "جزئیات هوا",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Start,
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -60,27 +63,27 @@ fun WeatherExtraDetails(
                             timestamp = timestamp,
                             timezone = timezone,
                         ),
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
 
                     Text(
                         text = weather.locationName,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.End,
                         color = Color.White,
                         style = MaterialTheme.typography.titleMedium
                     )
-
                 }
 
-                Spacer(
-                    modifier = Modifier.height(20.dp)
-                )
+                Spacer(Modifier.height(15.dp))
+
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
-                    color = GlassBorder
-                )
-                Spacer(
-                    modifier = Modifier.height(20.dp)
+                    color = GlassBorder,
+                    thickness = 2.dp
                 )
 
                 WeatherDetailRow(
@@ -93,8 +96,9 @@ fun WeatherExtraDetails(
                     value2 = "${weather.cloudiness}%",
                 )
 
-                Spacer(
-                    modifier = Modifier.height(16.dp)
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = GlassBorder
                 )
 
                 WeatherDetailRow(
@@ -114,8 +118,9 @@ fun WeatherExtraDetails(
                     } ?: "ندارد",
                 )
 
-                Spacer(
-                    modifier = Modifier.height(16.dp)
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = GlassBorder
                 )
 
                 WeatherDetailRow(
@@ -143,18 +148,21 @@ private fun WeatherDetailRow(
     value2: String
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(24.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+            .padding(vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         WeatherDetailItem(
             title = title1,
             value = value1,
             modifier = Modifier.weight(1f)
         )
+
         VerticalDivider(
-            modifier = Modifier
-                .height(32.dp)
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.padding(horizontal = 10.dp)
+                .fillMaxHeight(),
             color = GlassBorder
         )
 
@@ -181,12 +189,13 @@ private fun WeatherDetailItem(
             text = title,
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium
+
         )
 
         Text(
             text = value,
             color = Color.White,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

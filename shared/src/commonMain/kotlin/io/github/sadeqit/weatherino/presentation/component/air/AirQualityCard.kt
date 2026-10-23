@@ -90,7 +90,8 @@ fun AirQualityCard(
 
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 10.dp),
-                    color = GlassBorder
+                    color = GlassBorder,
+                    thickness = 2.dp
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),

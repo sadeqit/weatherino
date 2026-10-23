@@ -361,51 +361,6 @@ private fun BenefitsSection() {
         }
     }
 }
-/*@Composable
-private fun BenefitsSection() {
-    GlassCard(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Text(
-                text = "حمایت شما صرف چه چیزهایی می‌شود؟",
-                color = Color.White,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-            )
-            HorizontalDivider(
-                color = GlassBorder,
-                thickness = 2.dp,
-            )
-            BenefitItem(
-                icon = Icons.Default.BugReport,
-                title = "بهبود عملکرد و رفع باگ‌ ها",
-                Color(0xFFFF6B6B)
-
-            )
-            HorizontalDivider(color = GlassBorder)
-            BenefitItem(
-                icon = Icons.Default.NewReleases,
-                title = "افزودن قابلیت‌ های جدید",
-                Color(0xFFFFC857)
-            )
-            HorizontalDivider(color = GlassBorder)
-            BenefitItem(
-                icon = Icons.Default.Sync,
-                title = "بهبود و بروزرسانی مداوم",
-                Color(0xFF64B5F6)
-            )
-            HorizontalDivider(color = GlassBorder)
-            BenefitItem(
-                icon = Icons.Default.RocketLaunch,
-                title = "ادامه توسعه ودرینو",
-                Color(0xFF81C784)
-            )
-        }
-    }
-}*/
 
 @Composable
 private fun BenefitItem(

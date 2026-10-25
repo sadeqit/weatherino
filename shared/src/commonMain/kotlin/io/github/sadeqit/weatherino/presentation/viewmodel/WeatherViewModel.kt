@@ -31,7 +31,8 @@ class WeatherViewModel(
     private val searchCitiesUseCase: SearchCitiesUseCase,
     private val cityPreferences: CityPreferences,
     private val checkNetworkConnection: CheckNetworkConnectionUseCase
-) : ViewModel() {
+) : ViewModel()
+{
 
     private val _uiState = MutableStateFlow(WeatherUiState())
 
@@ -147,17 +148,17 @@ class WeatherViewModel(
                     val airQuality = airQualityResult.getOrThrow()
                     val forecast = forecastResult.getOrThrow()
 
-                    locationName?.let {
-                        cityPreferences.saveCity(
-                            name = it,
-                            latitude = latitude,
-                            longitude = longitude
-                        )
-                    }
+                    val finalLocationName = locationName ?: weather.locationName
 
-                    val finalWeather = locationName?.let {
-                        weather.copy(locationName = it)
-                    } ?: weather
+                    cityPreferences.saveCity(
+                        name = finalLocationName,
+                        latitude = latitude,
+                        longitude = longitude
+                    )
+
+                    val finalWeather = weather.copy(
+                        locationName = finalLocationName
+                    )
 
                     _uiState.value = WeatherUiState(
                         isLoading = false,

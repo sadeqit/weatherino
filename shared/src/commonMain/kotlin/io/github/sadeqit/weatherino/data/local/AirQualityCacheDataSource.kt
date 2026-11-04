@@ -1,8 +1,10 @@
 package io.github.sadeqit.weatherino.data.local
 
+import io.github.sadeqit.weatherino.core.dispatcher.databaseDispatcher
 import io.github.sadeqit.weatherino.database.AirQualityCache
 import io.github.sadeqit.weatherino.database.WeatherinoDatabase
 import io.github.sadeqit.weatherino.domain.model.AirQuality
+import kotlinx.coroutines.withContext
 
 class AirQualityCacheDataSource(
     database: WeatherinoDatabase
@@ -12,9 +14,12 @@ class AirQualityCacheDataSource(
     suspend fun getAirQuality(
         latitude: Double,
         longitude: Double
-    ): AirQuality? {
-        return queries
-            .getAirQuality(latitude, longitude)
+    ): AirQuality? = withContext(databaseDispatcher) {
+        queries
+            .getAirQuality(
+                latitude.toCacheKey(),
+                longitude.toCacheKey()
+            )
             .executeAsOneOrNull()
             ?.toDomain()
     }
@@ -22,27 +27,34 @@ class AirQualityCacheDataSource(
     suspend fun saveAirQuality(
         airQuality: AirQuality
     ) {
-        queries.insertAirQuality(
-            latitude = airQuality.latitude,
-            longitude = airQuality.longitude,
-            timestamp = airQuality.timestamp,
-            aqi = airQuality.aqi.toLong(),
-            carbonMonoxide = airQuality.carbonMonoxide,
-            nitricOxide = airQuality.nitricOxide,
-            nitrogenDioxide = airQuality.nitrogenDioxide,
-            ozone = airQuality.ozone,
-            sulfurDioxide = airQuality.sulfurDioxide,
-            pm2_5 = airQuality.pm2_5,
-            pm10 = airQuality.pm10,
-            ammonia = airQuality.ammonia
-        )
+        withContext(databaseDispatcher) {
+            queries.insertAirQuality(
+                latitude = airQuality.latitude.toCacheKey(),
+                longitude = airQuality.longitude.toCacheKey(),
+                timestamp = airQuality.timestamp,
+                aqi = airQuality.aqi.toLong(),
+                carbonMonoxide = airQuality.carbonMonoxide,
+                nitricOxide = airQuality.nitricOxide,
+                nitrogenDioxide = airQuality.nitrogenDioxide,
+                ozone = airQuality.ozone,
+                sulfurDioxide = airQuality.sulfurDioxide,
+                pm2_5 = airQuality.pm2_5,
+                pm10 = airQuality.pm10,
+                ammonia = airQuality.ammonia
+            )
+        }
     }
 
     suspend fun deleteAirQuality(
         latitude: Double,
         longitude: Double
     ) {
-        queries.deleteAirQuality(latitude, longitude)
+        withContext(databaseDispatcher) {
+            queries.deleteAirQuality(
+                latitude.toCacheKey(),
+                longitude.toCacheKey()
+            )
+        }
     }
 }
 

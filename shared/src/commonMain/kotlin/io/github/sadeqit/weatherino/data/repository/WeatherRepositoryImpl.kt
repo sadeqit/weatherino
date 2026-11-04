@@ -15,7 +15,8 @@ class WeatherRepositoryImpl(
     private val cacheDataSource: WeatherCacheDataSource,
     private val airQualityCacheDataSource: AirQualityCacheDataSource,
     private val forecastCacheDataSource: ForecastCacheDataSource
-): WeatherRepository {
+): WeatherRepository
+{
 
     override suspend fun getCurrentWeather(
         latitude: Double,
@@ -32,7 +33,7 @@ class WeatherRepositoryImpl(
 
         cacheDataSource.saveWeather(weatherToCache)
 
-        return weather
+        return weatherToCache
     }
 
     override suspend fun getCachedWeather(

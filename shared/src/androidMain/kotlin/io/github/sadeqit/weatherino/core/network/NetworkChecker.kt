@@ -21,7 +21,7 @@ actual class NetworkChecker(
                 ?: return false
 
         return capabilities.hasCapability(
-            NetworkCapabilities.NET_CAPABILITY_VALIDATED
+            NetworkCapabilities.NET_CAPABILITY_INTERNET
         )
     }
 }

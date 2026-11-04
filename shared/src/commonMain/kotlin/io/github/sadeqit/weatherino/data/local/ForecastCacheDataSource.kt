@@ -1,8 +1,10 @@
 package io.github.sadeqit.weatherino.data.local
 
+import io.github.sadeqit.weatherino.core.dispatcher.databaseDispatcher
 import io.github.sadeqit.weatherino.database.ForecastCache
 import io.github.sadeqit.weatherino.database.WeatherinoDatabase
 import io.github.sadeqit.weatherino.domain.model.WeatherForecast
+import kotlinx.coroutines.withContext
 
 class ForecastCacheDataSource(
     database: WeatherinoDatabase
@@ -12,9 +14,12 @@ class ForecastCacheDataSource(
     suspend fun getForecast(
         latitude: Double,
         longitude: Double
-    ): List<WeatherForecast> {
-        return queries
-            .getForecast(latitude, longitude)
+    ): List<WeatherForecast> = withContext(databaseDispatcher) {
+        queries
+            .getForecast(
+                latitude.toCacheKey(),
+                longitude.toCacheKey()
+            )
             .executeAsList()
             .map { it.toDomain() }
     }
@@ -24,37 +29,44 @@ class ForecastCacheDataSource(
         longitude: Double,
         forecasts: List<WeatherForecast>
     ) {
-        queries.transaction {
-            queries.deleteForecast(latitude, longitude)
+        withContext(databaseDispatcher) {
+            val cacheLatitude = latitude.toCacheKey()
+            val cacheLongitude = longitude.toCacheKey()
 
-            forecasts.forEach { forecast ->
-                queries.insertForecast(
-                    latitude = latitude,
-                    longitude = longitude,
-                    timestamp = forecast.timestamp,
-                    temperature = forecast.temperature,
-                    feelsLike = forecast.feelsLike,
-                    minTemperature = forecast.minTemperature,
-                    maxTemperature = forecast.maxTemperature,
-                    humidity = forecast.humidity.toLong(),
-                    pressure = forecast.pressure.toLong(),
-                    visibility = forecast.visibility?.toLong(),
-                    precipitationProbability = forecast.precipitationProbability,
-                    rainThreeHours = forecast.rainThreeHours,
-                    snowThreeHours = forecast.snowThreeHours,
-                    windSpeed = forecast.windSpeed,
-                    windDirection = forecast.windDirection?.toLong(),
-                    cloudiness = forecast.cloudiness?.toLong(),
-                    weatherId = forecast.weatherId.toLong(),
-                    weatherMain = forecast.weatherMain,
-                    weatherDescription = forecast.weatherDescription,
-                    weatherIcon = forecast.weatherIcon,
-                    timezone = forecast.timezone.toLong(),
+            queries.transaction {
+                queries.deleteForecast(
+                    cacheLatitude,
+                    cacheLongitude
                 )
+
+                forecasts.forEach { forecast ->
+                    queries.insertForecast(
+                        latitude = cacheLatitude,
+                        longitude = cacheLongitude,
+                        timestamp = forecast.timestamp,
+                        temperature = forecast.temperature,
+                        feelsLike = forecast.feelsLike,
+                        minTemperature = forecast.minTemperature,
+                        maxTemperature = forecast.maxTemperature,
+                        humidity = forecast.humidity.toLong(),
+                        pressure = forecast.pressure.toLong(),
+                        visibility = forecast.visibility?.toLong(),
+                        precipitationProbability = forecast.precipitationProbability,
+                        rainThreeHours = forecast.rainThreeHours,
+                        snowThreeHours = forecast.snowThreeHours,
+                        windSpeed = forecast.windSpeed,
+                        windDirection = forecast.windDirection?.toLong(),
+                        cloudiness = forecast.cloudiness?.toLong(),
+                        weatherId = forecast.weatherId.toLong(),
+                        weatherMain = forecast.weatherMain,
+                        weatherDescription = forecast.weatherDescription,
+                        weatherIcon = forecast.weatherIcon,
+                        timezone = forecast.timezone.toLong(),
+                    )
+                }
             }
         }
     }
-
 }
 
 private fun ForecastCache.toDomain(): WeatherForecast {

@@ -12,8 +12,7 @@ import io.ktor.client.request.parameter
 
 class OpenWeatherApiImpl(
     private val httpClient: HttpClient
-) : OpenWeatherApi
-{
+) : OpenWeatherApi {
 
     companion object {
         private const val BASE_URL = "https://api.openweathermap.org"
@@ -24,9 +23,9 @@ class OpenWeatherApiImpl(
         longitude: Double
     ): CurrentWeatherResponse {
         return httpClient.get("$BASE_URL/data/2.5/weather") {
+            parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("lat", latitude)
             parameter("lon", longitude)
-            parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("units", "metric")
             parameter("lang", "fa")
         }.body()
@@ -37,9 +36,9 @@ class OpenWeatherApiImpl(
         longitude: Double
     ): AirPollutionResponse {
         return httpClient.get("$BASE_URL/data/2.5/air_pollution") {
+            parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("lat", latitude)
             parameter("lon", longitude)
-            parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
         }.body()
     }
 
@@ -48,22 +47,23 @@ class OpenWeatherApiImpl(
         longitude: Double
     ): ForecastResponse {
         return httpClient.get("$BASE_URL/data/2.5/forecast") {
+            parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("lat", latitude)
             parameter("lon", longitude)
-            parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             parameter("units", "metric")
             parameter("lang", "fa")
         }.body()
     }
+
     override suspend fun searchCities(
         query: String,
         limit: Int
     ): List<GeocodingResponse> {
         return httpClient
             .get("$BASE_URL/geo/1.0/direct") {
+                parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
                 parameter("q", "$query,IR")
                 parameter("limit", limit)
-                parameter("appid", BuildKonfig.OPENWEATHER_API_KEY)
             }
             .body()
     }
